@@ -40,15 +40,5 @@ Users.sync({
 }).then(() => {
   console.log('Users is successful')
 })
-// 添加用户
-const createUser = async (user) => {
-  await Users.create({
-    user_name: user.name,
-    user_password: user.user_password,
-    user_phone: user.phone
-  })
-}
 
-module.exports = {
-  createUser
-}
+module.exports = Users

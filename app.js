@@ -5,6 +5,7 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const compress = require('koa-compress')
 
 //导入路由中间件
 const index = require('./routes/index')
@@ -17,6 +18,11 @@ onerror(app)
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
+
+// 头部压缩
+const options = { threshold: 2048 }
+app.use(compress(options))
+
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
