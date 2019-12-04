@@ -1,5 +1,5 @@
 // 处理商家业务
-const Users = require('../../db/users/index')
+const Users = require('../../db/userModel/index')
 
 // 添加用户
 const createUser = async (user) => {

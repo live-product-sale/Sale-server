@@ -5,9 +5,9 @@ const Users = mysql.define('user', {
   user_id: {
     type: Sequelize.STRING
   },
-  user_name: {                      // 创建表字段
+  user_name: {                     // 创建表字段
     type: Sequelize.STRING,        //定义字段类型
-    field: 'user_name'         //指定存储在表中的健名
+    field: 'user_name'             //指定存储在表中的健名
   },
   user_password: {
     type: Sequelize.STRING,
@@ -19,10 +19,12 @@ const Users = mysql.define('user', {
     type: Sequelize.STRING
   },
   user_isbusiness: {
-    type: Sequelize.BOOLEAN
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   },
   user_iscustomer: {
-    type: Sequelize.BOOLEAN
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 }, {
   // 如果为 true 则表的名称和 model 相同，即 user
