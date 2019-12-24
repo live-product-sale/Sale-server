@@ -5,6 +5,7 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const compress = require('koa-compress')
+const koaJwt = require('koa-jwt')   // 验证token
 
 const sendHandle = require('./middleware/sendHandle')
 const errorHandle = require('./middleware/errorHandle')
@@ -27,6 +28,11 @@ app.use(json())
 app.use(countLogger)
 app.use(sendHandle())
 app.use(errorHandle)
+//验证token
+app.use(koaJwt({
+  secret: '19970926ly'
+}).unless({ path: [/\/user\/login/, /\/user\/register/,/\/live\/add/,/\/live\/alllive/]}))
+
 app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {

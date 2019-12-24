@@ -1,17 +1,27 @@
-const crypto = require('crypto')
-const jwt = require('jsonwebtoken')  // 用户初次登陆生成token
+// const crypto = require('crypto')
+const { createToken } = require('../util/utils')
 const userModel = require('../db/userModel/index')
 
 class UserController {
   //用户注册
   static async register(ctx) {
-
+     const data = ctx.request.body
+     const user = {
+       user_id: data.uid,
+       user_phone: data.phone,
+       user_password: data.password
+     }
+     const result = await userModel.create(user)
+     console.log(result)
+     ctx.body = {
+       code: '000001',
+       message: '注册成功'
+     }
   }
   //用户登陆
   static async login(ctx) {
     const data = ctx.request.body
-    console.log('接收数据', data)
-    if( !data.phone || !data.password) {
+    if( !data.name || !data.password) {
       return ctx.body = {
           code: '000002',
           data: null,
@@ -19,17 +29,16 @@ class UserController {
         }
     }
     const result = await userModel.findOne({
-      user_name: data.phone,
-      user_password: data.password // 密码加密存储
+      where: {
+        user_name: data.name,
+        user_password: data.password
+      }
     })
     if(result !== null) {
-      const token = jwt.sign({
-        name: result.name,
-        _id: result._id
-      }, 'my_token', { expiresIn: '2h'});
+      const token = createToken(data)
       return ctx.body = {
         code: '000001',
-        data: token,
+        data: { "token": token },
         message: '登陆成功'
       }
     } else {
