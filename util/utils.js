@@ -35,7 +35,7 @@ const secret = '19970926ly'   // 生成token的密钥
 //  测试
 //  console.log(getPlayUrl('232456', new Date()))
 /**
- *  用于生成token
+ * 用于生成token
  * @param { any } data 
  * @param { String } secret 
  * @returns { String } token
@@ -46,7 +46,7 @@ const createToken = (data) => {
 }
 /**
  * 生成uid
- * @return { UUID } uid
+ * @returns { UUID } uid
  */
 const createUID = () => {
   const uid = uuid().split('-').join('')

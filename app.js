@@ -31,7 +31,9 @@ app.use(errorHandle)
 //验证token
 app.use(koaJwt({
   secret: '19970926ly'
-}).unless({ path: [/\/user\/login/, /\/user\/register/,/\/live\/add/,/\/live\/alllive/]}))
+}).unless({ 
+  path: [/\/user\/login/, /\/user\/register/]  // 注册登陆不需要token
+}))
 
 app.use(require('koa-static')(__dirname + '/public'))
 
