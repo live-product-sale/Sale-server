@@ -36,5 +36,5 @@ const sendMail = (userEmail, code) => {
 }
 // 测试
  
-sendMail('2315662855@qq.com', '13245')
+// sendMail('2315662855@qq.com', '13245')
 module.exports = sendMail
