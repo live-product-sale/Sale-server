@@ -4,30 +4,29 @@ const cusModal = require('../../modal/cus_modal')
 class cusController {
   // 处理登陆
   static async login(ctx) {
-    const { cname, cpassword } = ctx.request.body
-      const result = await cusModal.findOne({
-        where: {
-          cname: cname,
-          cpassword: cpassword
-        }
-      })
-      if(result !== null) {
-        return ctx.body = {
-          code: '000000',
-          data: { 
-            uid: result.uuid,
-            token: createToken({cname, cpassword})
-          },
-          msg: '登陆成功'
-        }
-      } else {
-        return ctx.body = {
-          code: '000001',
-          data: null,
-          msg: '账号或密码错误'
-        }
+    const { cphone, cpassword } = ctx.request.body
+    const result = await cusModal.findOne({
+      where: {
+        cphone: cphone,
+        cpassword: cpassword
       }
-    
+    })
+    if(result !== null) {
+      return ctx.body = {
+        code: '000000',
+        data: { 
+          uid: result.uuid,
+          token: createToken({cphone, cpassword})
+        },
+        msg: '登陆成功'
+      }
+    } else {
+      return ctx.body = {
+        code: '000001',
+        data: null,
+        msg: '账号或密码错误'
+      }
+    } 
   }
   // 处理注册
   static async register(ctx) {

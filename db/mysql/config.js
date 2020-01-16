@@ -14,7 +14,7 @@ const devConfig = {
     host: '49.235.51.111',
     port: '3306',
     user: 'root',
-    password: '19970926zg',
+    password: '19970926Ly!',
     database: 'SalesLivePlatform'
   }
 }
