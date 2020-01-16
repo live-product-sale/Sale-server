@@ -2,7 +2,7 @@ const { getItem, redisClient } = require('../util/redis/index')
 
 //登陆验证处理
 const checkLogin = async (ctx, next) => {
-  const { code , cname, cpassword } = ctx.request.body
+  const { code , cphone, cpassword } = ctx.request.body
   if(!code) {
     return ctx.body = {
       code: '000005',
@@ -10,7 +10,7 @@ const checkLogin = async (ctx, next) => {
       msg: '验证码为空'
     }
   }
-  if( !cname || !cpassword) {
+  if( !cphone || !cpassword) {
     return ctx.body = {
       code: '000002',
       data: null,
