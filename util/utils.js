@@ -14,7 +14,6 @@ const secret = '19970926ly'   // 生成token的密钥
    const stream = Base64.encode(streamName)
    const time = new Date(new Date().setDate(new Date().getDate() + 1)).getTime() / 1000
    const pushDomain = '67845.livepush.myqcloud.com'   // 推流域名
-
    const pushKey = '5850747f8aab996c8214d21336f58179'  // API key
    const txTime = parseInt(time).toString(16).toUpperCase()
    const txSecret = md5(`${ pushKey }.${ stream }.${ txTime }`)
@@ -30,7 +29,6 @@ const secret = '19970926ly'   // 生成token的密钥
    const playDomain = 'zhangly.xyz'
    const time = new Date(new Date().setDate(new Date().getDate() + 1)).getTime() / 1000
    const stream = Base64.encode(streamName)
-
    const playKey = '5850747f8aab996c8214d21336f58179'
    const txTime = parseInt(time).toString(16).toUpperCase()
    const txSecret = md5(`${ playKey }.${ stream }.${ txTime }`)
@@ -47,23 +45,19 @@ const secret = '19970926ly'   // 生成token的密钥
  * @returns { String } token
  */
 const createToken = (data) => {
-  const token = jwt.sign(data, secret, {expiresIn: '2h'})
+  const token = jwt.sign(data, secret, {expiresIn:'24h'} )
   return token
 }
 /**
- * 生成uid
- * @returns { UUID } uid
+ * 随机生成ID
  */
-const createUID = () => {
-  const uid = uuid().split('-').join('')
-  return uid
+const generateId = () => {
+  return Math.random().toString().substr(3, 8) + Date.now().toString(36)
 }
-//  测试
-// console.log(createUID())
 
 module.exports = {
   getPushUrl,
   getPlayUrl,
   createToken,
-  createUID
+  generateId
 }

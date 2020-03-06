@@ -1,4 +1,7 @@
-const { getItem, redisClient } = require('../util/redis/index')
+const { 
+  getItem, 
+  redisClient 
+} = require('../util/redis/index')
 
 //登陆验证处理
 const checkLogin = async (ctx, next) => {
@@ -18,11 +21,12 @@ const checkLogin = async (ctx, next) => {
     }
   }
   const data = await getItem('captcha')
-  console.log('data', data, 'code', code)
+  // console.log('data', data, 'code', code)
   if(code === data) {
     await next()
     redisClient.del('captcha')
   } else {
+    redisClient.del('captcha')
     return ctx.body = {
       code: '000005',
       data: null,

@@ -1,4 +1,7 @@
-const { getItem, redisClient } = require('../util/redis/index')
+const { 
+  getItem, 
+  redisClient 
+} = require('../util/redis/index')
 
 // 检查手机验证码
 const checkMobCode = async (ctx, next) => {

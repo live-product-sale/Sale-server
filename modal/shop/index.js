@@ -3,20 +3,24 @@ const mysql = require('../../db/mysql/index')
 
 const shop = mysql.define('shop', {
   shop_id: {
-    type: Sequelize.UUID,
+    type: Sequelize.STRING,
     PrimaryKey: true
   },
   shop_name: {
     type: Sequelize.STRING
   },
-  bus_id: {
-    type: Sequelize.UUID
+  shop_avatar: {
+    type: Sequelize.STRING
   },
-  bus_name: {
+  uid: {
+    type: Sequelize.STRING
+  },
+  live_id: {
     type: Sequelize.STRING
   }
 }, {
-  freezeTableName: false
+  freezeTableName: false,
+  timestamps: false
 })
 
 shop.sync({

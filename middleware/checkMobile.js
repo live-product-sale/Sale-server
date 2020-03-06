@@ -1,4 +1,4 @@
-const userModal = require('../modal/cus_modal')
+const userModal = require('../modal/user')
 
 /**
  * 手机号是为空
@@ -28,11 +28,14 @@ const IsMobile = async (ctx, next) => {
  * @param {*} next 
  */
 const IsMobileRegisted = async (ctx, next) => {
-  const { cphone } = ctx.request.body
+  let cphone
+  if(ctx.request.method === 'GET') {
+     cphone = ctx.request.query.cphone
+  } else {
+     cphone = ctx.request.body.cphone
+  }
   const mob_res = await userModal.findOne({
-    where: {
-      cphone
-    }
+    where: { cphone }
   })
   if(mob_res) {
     return ctx.body = {
@@ -52,9 +55,7 @@ const IsMobileRegisted = async (ctx, next) => {
 const IsNameUsed = async (ctx, next) => {
   const { cname } = ctx.request.body
   const cur_res = await userModal.findOne({
-    where: {
-      cname
-    }
+    where: { cname }
   })
   if(cur_res) {
     return ctx.body = {

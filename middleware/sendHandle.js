@@ -21,7 +21,6 @@ const sendHandle = () => {
       }
     }
   }
-
   return async (ctx, next) => {
     ctx.send = render(ctx),
     ctx.sendError = renderError(ctx)

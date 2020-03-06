@@ -1,22 +1,28 @@
-const { createUID, createToken } = require('../../util/utils')
-const cusModal = require('../../modal/cus_modal')
+const { 
+  createToken, 
+  generateId 
+} = require('../../util/utils')
+const userInfo = require('../../modal/user/userinfo')
+const userModal = require('../../modal/user')
 
 class cusController {
   // 处理登陆
   static async login(ctx) {
     const { cphone, cpassword } = ctx.request.body
-    const result = await cusModal.findOne({
-      where: {
-        cphone: cphone,
-        cpassword: cpassword
-      }
+    const result = await userModal.findOne({
+      where: { cphone, cpassword }
     })
     if(result !== null) {
       return ctx.body = {
         code: '000000',
         data: { 
-          uid: result.uuid,
-          token: createToken({cphone, cpassword})
+          token: createToken({cphone, cpassword}),
+          userinfo: {
+            ...result.dataValues, 
+            cpassword: undefined,
+            createdAt: undefined, 
+            updatedAt: undefined
+          }
         },
         msg: '登陆成功'
       }
@@ -30,14 +36,10 @@ class cusController {
   }
   // 处理注册
   static async register(ctx) {
-    const {cname, cpassword, cphone} = ctx.request.body
-    const uuid = createUID()
-    const result = await cusModal.create({
-      cname,
-      cphone,
-      cpassword,
-      uuid
-    })
+    const { cpassword, cphone } = ctx.request.body
+    const uid = generateId()
+    const result = await userModal.create(
+      { uid, cphone, cpassword })
     if(result) {
       return ctx.body = {
         code: '000000',
@@ -66,7 +68,7 @@ class cusController {
         msg: '手机号为空'
       }
     }
-    const result = await cusModal.findOne({
+    const result = await userModal.findOne({
       where: {
         cphone
       }
@@ -78,7 +80,7 @@ class cusController {
          msg: '该账号不存在'
        }
     }
-    const res = await cusModal.update(
+    const res = await userModal.update(
       { cpassword },
       { 
         where: { cphone }

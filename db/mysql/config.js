@@ -11,10 +11,10 @@ const prodConfig = {
 // 开发环境配置数据库
 const devConfig = {
   database: {
-    host: '49.235.51.111',
+    host: '127.0.0.1',
     port: '3306',
     user: 'root',
-    password: '19970926Ly!',
+    password: '19970926zg',
     database: 'SalesLivePlatform'
   }
 }

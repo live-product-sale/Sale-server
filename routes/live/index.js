@@ -1,14 +1,14 @@
 const router = require('koa-router')()
-const liveServices = require('../../controllers/liveServices')
+const BusServices = require('../../controllers/liveServices/businessService ')
 router.prefix('/live')
 
 // 创建直播室
-router.post('/create', liveServices.createLive)  
-// 修改直播室信息 
-router.post('/revise', liveServices.reviseLive)
-// 获取直播时信息
-router.get('/achieve', liveServices.achieveLive)
-// 删除直播室信息
-router.post('/delete', liveServices.deleteLive)
+router.post('/create', BusServices.createLive)  
+// 根据商店shop_Id获取直播间
+router.get('/liveroom', BusServices.getLiveByShopId)
+// 根据直播live_id获取信息
+router.get('/liveItem', BusServices.getLiveById)
+// 根据live_id开始或结束直播
+router.get('/liveStart', BusServices.startOrEndLive)
 
 module.exports = router
