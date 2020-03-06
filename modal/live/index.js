@@ -29,6 +29,9 @@ const live = mysql.define('live', {
   shop_name: {
     type: Sequelize.STRING
   },
+  shop_slogan: {
+    type: Sequelize.STRING
+  },
   good_price: {
     type: Sequelize.STRING
   },

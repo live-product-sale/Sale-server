@@ -30,9 +30,9 @@ class busService {
   static async getLiveByShopId(ctx) {
    const { shop_id } = ctx.request.query
    const result = await liveModal.findAll({
-     where: { shop_id }
+     where: { shop_id },
+     attributes: { exclude: ['live_play']}
    })
-   result.forEach(item => { item.live_play = undefined });
    return ctx.body = {
      code: "000000",
      msg: "ok",
