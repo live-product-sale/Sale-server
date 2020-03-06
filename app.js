@@ -3,9 +3,10 @@ const app = new Koa()
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
-const bodyparser = require('koa-bodyparser')
+// const bodyparser = require('koa-bodyparser')
 const compress = require('koa-compress')
 const koaJwt = require('koa-jwt')   // 验证token
+const koaBody = require('koa-body')  // 处理文件上传
 
 const sendHandle = require('./middleware/sendHandle')
 const errorHandle = require('./middleware/errorHandle')
@@ -15,10 +16,19 @@ const allRoutes = require('./routes/index')
 // error handler
 onerror(app)
 
+// 处理文件上传
+app.use(koaBody({ 
+  multipart: true,
+  strict:false,       //设为false
+  formidable: {
+      maxFileSize: 1024 * 1024 * 1024
+  }
+ }))
+
 // 是服务端可以 获取ctx.request.body 中的数据
-app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
-}))
+// app.use(bodyparser({
+//   enableTypes:['json', 'form', 'text']
+// }))
 
 // 头部压缩
 const options = { threshold: 2048 }
