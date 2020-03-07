@@ -1,8 +1,7 @@
 const md5 = require('js-md5')
 const { Base64 } = require('js-base64')
-const uuid = require('uuid/v1')
 const jwt = require('jsonwebtoken')  // 生成token
-const secret = '19970926ly'   // 生成token的密钥
+const secret = '19970926ly'          // 生成token的密钥
 
 /**
  *  获取推流地址
