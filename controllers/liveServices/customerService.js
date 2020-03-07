@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-06 21:12:57
+ * @LastEditTime: 2020-03-07 10:19:09
  */
 const liveModal = require('../../modal/live')
 
@@ -29,7 +29,7 @@ class customerService {
      console.log(live_id)
      const result = await liveModal.findOne({
        where: { live_id },
-       attributes: { exclude: ['live_push', 'live_poster', 'shop_slogan', 'good_price', 'good_avatar']}
+       attributes: { exclude: ['live_push', 'shop_slogan', 'good_price', 'good_avatar', 'status', 'sort_id']}
      })
      return ctx.body = {
        code: "000000",

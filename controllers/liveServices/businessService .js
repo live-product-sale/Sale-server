@@ -9,9 +9,9 @@ class busService {
   // 创造直播室
   static async createLive(ctx) {
      const { shop_id, poster } = ctx.request.body
-     const live_id = generateId()
-     const live_push = getPushUrl(shop_id)
-     const live_play = getPlayUrl(shop_id)
+     const live_id = Date.now().toString().substr(8,5)+Math.random().toString().substr(8,5)
+     const live_push = getPushUrl(live_id)
+     const live_play = getPlayUrl(live_id)
      const result = await liveModal.create({
        live_id,
        live_poster: poster,
