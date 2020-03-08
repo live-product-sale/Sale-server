@@ -32,10 +32,10 @@ const live = mysql.define('live', {
   shop_slogan: {
     type: Sequelize.STRING
   },
-  good_price: {
+  goods_price: {
     type: Sequelize.STRING
   },
-  good_avatar: {
+  goods_avatar: {
     type: Sequelize.STRING
   },
   shop_id: {

@@ -8,14 +8,13 @@ const {
 class busService {
   // 创造直播室
   static async createLive(ctx) {
-     const { shop_id, poster } = ctx.request.body
+     const data = ctx.request.body
      const live_id = Date.now().toString().substr(8,5)+Math.random().toString().substr(8,5)
      const live_push = getPushUrl(live_id)
      const live_play = getPlayUrl(live_id)
      const result = await liveModal.create({
        live_id,
-       live_poster: poster,
-       shop_id,
+       ...data,
        live_push,
        live_play
      })
@@ -51,13 +50,25 @@ class busService {
       msg: 'ok'
     }
   }
-  // 开始或结束直播
-  static async startOrEndLive(ctx) {
+  // 开始直播
+  static async startLive(ctx) {
     const { live_id, status } = ctx.request.query
     const result = await liveModal.update(
       { status },
       { where: { live_id }
     })
+    return ctx.body = {
+      code: "000000",
+      data: result,
+      msg: "ok"
+    }
+  }
+  // 结束直播
+  static async endLive(ctx) {
+    const { live_id, status } = ctx.request.query
+    const result = await liveModal.update ({
+      status
+    }, { where: { live_id }})
     return ctx.body = {
       code: "000000",
       data: result,

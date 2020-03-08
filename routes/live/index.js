@@ -10,7 +10,8 @@ router.get('/livebyshop', BusServices.getLiveByShopId)
 // 根据直播live_id获取信息
 router.get('/liveItem', BusServices.getLiveById)
 // 根据live_id开始或结束直播
-router.get('/liveStart', BusServices.startOrEndLive)
+router.get('/liveStart', BusServices.startLive)
+router.get('/liveEnd', BusServices.endLive)
 // 获取直播列表
 router.get('/liveList', CusServices.getLiveList)
 // 获取拉流信息
