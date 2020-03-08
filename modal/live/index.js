@@ -29,10 +29,13 @@ const live = mysql.define('live', {
   shop_name: {
     type: Sequelize.STRING
   },
-  good_price: {
+  shop_slogan: {
     type: Sequelize.STRING
   },
-  good_avatar: {
+  goods_price: {
+    type: Sequelize.STRING
+  },
+  goods_avatar: {
     type: Sequelize.STRING
   },
   shop_id: {

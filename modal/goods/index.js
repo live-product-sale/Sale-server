@@ -2,20 +2,20 @@ const Sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 
 const goods = mysql.define('goods', {
-  good_id: {
+  goods_id: {
     type: Sequelize.STRING,
     primaryKey: true
   },
-  good_name: {
+  goods_name: {
     type: Sequelize.STRING
   },
-  good_stock: {
+  goods_price: {
     type: Sequelize.STRING
   },
-  good_price: {
+  goods_stock: {
     type: Sequelize.STRING
   },
-  good_avatar: {
+  goods_avatar: {
     type: Sequelize.STRING
   },
   shop_id: {
