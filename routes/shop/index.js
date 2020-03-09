@@ -12,5 +12,5 @@ router.prefix("/shop")
 
 router.post('/create', shopService.createShop)
 router.get('/list', shopService.getShopInfo)
-
+router.get('/shopInfo', shopService.getShopByShopId)
 module.exports = router
