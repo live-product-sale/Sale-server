@@ -53,8 +53,10 @@ class busService {
   // 开始直播
   static async startLive(ctx) {
     const { live_id, status } = ctx.request.query
+    const live_push = getPushUrl(live_id)
+    const live_play = getPlayUrl(live_id)
     const result = await liveModal.update(
-      { status },
+      { status, live_play, live_push },
       { where: { live_id }
     })
     return ctx.body = {

@@ -35,5 +35,17 @@ class goodService {
        msg: "ok"
      }
    }
+   // 根据goods_id 获取信息
+   static async getGoodsByGoodsId(ctx) {
+     const { goods_id} = ctx.request.query
+     const result = await goodsModal.findOne({
+       where: { goods_id }
+     })
+     return ctx.body = {
+        code: "000000",
+        data: result,
+        msg: "ok"
+     }
+   }
 }
 module.exports = goodService

@@ -14,7 +14,6 @@ router.get('/goodsbyshop', goodService.getGoodsByShopId)
 router.post('/creategoods', goodService.createGoods)
 router.post('/goodsInfo', goodsInfoService.increaseInfo)
 router.get('/goodsInfo', goodsInfoService.getGoodsInfo)
-
-
+router.get('/goodsSimpleinfo', goodService.getGoodsByGoodsId)
 
 module.exports = router

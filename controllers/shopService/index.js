@@ -37,5 +37,17 @@ class shopService {
       msg: 'ok'
     }
   }
+  //根据shop_id 获取信息
+  static async getShopByShopId(ctx) {
+    const { shop_id } = ctx.request.query
+    const result = await shopModal.findOne({
+      where: { shop_id }
+    })
+    return ctx.body = {
+      code: "000000",
+      data: result,
+      msg: "ok"
+    }
+  }
 }
 module.exports = shopService
