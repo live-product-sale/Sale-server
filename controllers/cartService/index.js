@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:40:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-08 19:21:53
+ * @LastEditTime: 2020-03-09 20:38:06
  */
 const cartModal = require('../../modal/cart')
 const Op = require('sequelize').Op
@@ -25,13 +25,11 @@ class cartService {
   static async increaseCart(ctx) {
     const data = ctx.request.body
     const result = await cartModal.findAll({
-      [Op.and] : [
-        {uid: data.uid}, 
-        {shop_id: data.shop_id},
-        {goods_id: data.goods_id},
-        {net_weight: data.net_weight},
-        {specification: data.specification}
-      ]
+      where : { 
+        goods_id: data.goods_id,
+        net_weight: data.net_weight,
+        specification: data.specification
+      }
     })
     if(result.length > 0) {
       await cartModal.update({
@@ -69,6 +67,30 @@ class cartService {
       code: "000000",
       data: null,
       msg: "删除成功"
+    }
+  }
+  // 改变购物车中的状态
+  static async changCartstatus(ctx) {
+     const { cart_id, status } = ctx.request.query
+     const result = await cartModal.update({
+       goods_checked: status
+     }, { where: { cart_id }})
+     return ctx.body = {
+       code: "000000",
+       data: result,
+       msg: "修改成功"
+     }
+  }
+  // 改变购物车中商品的数量
+  static async changCartGoodsNum(ctx) {
+    const { cart_id, goods_num } = ctx.request.query
+    const result  = await cartModal.update({
+      goods_num
+    }, { where: { cart_id }})
+    return ctx.body = {
+      code: "000000",
+      data: result,
+      msg: "修改成功"
     }
   }
 }

@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-07 10:19:09
+ * @LastEditTime: 2020-03-09 15:02:45
  */
 const liveModal = require('../../modal/live')
 
