@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:55:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-10 11:06:18
+ * @LastEditTime: 2020-03-12 20:48:32
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
@@ -14,7 +14,7 @@ const order = mysql.define('order', {
     type: sequelize.STRING,
     prmaryKey: true
   }, 
-  order_prcess: {
+  order_state: {
     type: sequelize.STRING,
     defaultValue: "0"
   },

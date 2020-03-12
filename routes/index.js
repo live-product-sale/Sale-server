@@ -6,6 +6,7 @@ const goodRoute = require('./goods')
 const cartRoute = require('./cart')
 const orderRoute = require('./order')
 const addressRoute = require('./address')
+const sortRouter = require('./rangesort')
 
 router.prefix('/api/v1')
 router.use(userRoute.routes(), userRoute.allowedMethods())
@@ -14,6 +15,7 @@ router.use(shopRoute.routes(), shopRoute.allowedMethods())
 router.use(goodRoute.routes(), goodRoute.allowedMethods())
 router.use(cartRoute.routes(), cartRoute.allowedMethods())
 router.use(orderRoute.routes(), orderRoute.allowedMethods())
+router.use(sortRouter.routes(), sortRouter.allowedMethods())
 router.use(addressRoute.routes(), addressRoute.allowedMethods())
 
 module.exports = router

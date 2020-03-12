@@ -4,15 +4,15 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:25:58
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-06 14:45:54
+ * @LastEditTime: 2020-03-11 20:30:40
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
+const user = require('./index')
 
 const userinfo = mysql.define('userinfo', {
   uid: {
-    type: sequelize.STRING,
-    primaryKey: true
+    type: sequelize.STRING
   },
   name: {
     type: sequelize.STRING
@@ -26,9 +26,9 @@ const userinfo = mysql.define('userinfo', {
 }, {
   timestamps: false
 })
-
+userinfo.belongsTo(user)
 userinfo.sync({
-  force: false
+  force: true
 }).then(() => {
   console.log('userinfo is successful')
 })
