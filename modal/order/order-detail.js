@@ -4,13 +4,16 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-10 11:10:10
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-12 20:48:42
+ * @LastEditTime: 2020-03-13 14:59:21
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const order = require('./index')
 
 const orderDetail = mysql.define('orderDetail', {
+  order_id: {
+    type: sequelize.STRING
+  },
   shop_id: {
     type: sequelize.STRING
   },
@@ -35,12 +38,5 @@ const orderDetail = mysql.define('orderDetail', {
 }, {
   timestamps: false
 })
-order.hasMany(orderDetail)
-orderDetail.belongsTo(order)
 
-orderDetail.sync({
-  force:  false
-}).then(() => {
-  console.log('order-detail is success')
-})
 module.exports = orderDetail

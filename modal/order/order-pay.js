@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-10 12:28:22
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-10 13:32:58
+ * @LastEditTime: 2020-03-13 17:27:34
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
@@ -30,7 +30,7 @@ const payOrder = mysql.define('payOrder', {
   timestamps: false
 })
 payOrder.sync({
-  force: true
+  force: false
 }).then(() => {
   console.log('payOrder is success')
 })
