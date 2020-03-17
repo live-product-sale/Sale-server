@@ -20,5 +20,11 @@ router.post('/register',IsMobile, IsMobileRegisted, checkMobCode, userServices.r
 router.get('/register/sendMsg', IsMobile, IsMobileRegisted, common.getMsgCode)
 // 响应修改密码
 router.post('/modifyPass', IsMobile, checkMobCode ,userServices.modifyPass)
+// 获取用户信息
+router.get('/userInfo', userServices.getUserInfo )
+// 完善用户信息
+router.post('/perfect', userServices.perfectUserInfo)
+// 获取用户名称
+router.get('/username', userServices.getUserNameByuid)
 
 module.exports = router

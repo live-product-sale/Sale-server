@@ -4,33 +4,31 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:25:58
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-11 20:30:40
+ * @LastEditTime: 2020-03-16 22:34:40
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const user = require('./index')
 
-const userinfo = mysql.define('userinfo', {
-  uid: {
-    type: sequelize.STRING
-  },
+const userInfo = mysql.define('userInfo', {
   name: {
     type: sequelize.STRING
   },
   gender: {
     type: sequelize.STRING
   },
-  avatar_url: {
+  avatar: {
     type: sequelize.STRING
   }
 }, {
   timestamps: false
 })
-userinfo.belongsTo(user)
-userinfo.sync({
-  force: true
+userInfo.belongsTo(user, { foreignKey: "uid"})
+user.hasOne(userInfo, { foreignKey: "uid"})
+userInfo.sync({
+  force: false
 }).then(() => {
   console.log('userinfo is successful')
 })
 
-module.exports = userinfo
+module.exports = userInfo

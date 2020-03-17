@@ -39,7 +39,9 @@ class cusController {
     const { cpassword, cphone } = ctx.request.body
     const uid = generateId()
     const result = await userModal.create(
-      { uid, cphone, cpassword })
+      { uid, cphone, cpassword },
+      { include: [userInfo]}
+    )
     if(result) {
       return ctx.body = {
         code: '000000',
@@ -91,6 +93,51 @@ class cusController {
         data: null,
         msg: '修改成功'
       }
+    }
+  }
+  // 获取用户信息
+  static async getUserInfo(ctx) {
+    const {uid} = ctx.request.query
+    const result = await userModal.findOne({
+      where: { uid },
+      attributes: { exclude: ["cpassword"]},
+      include: [userInfo]
+    })
+    return ctx.body = {
+      code: "000000",
+      data: result,
+      msg: "ok"
+    }
+  }
+  // 完善用户信息
+  static async perfectUserInfo(ctx) {
+    const {uid, name, gender, avatar} = ctx.request.body
+    const res = await userInfo.findOne({ 
+      where: { uid }
+    })
+    if(!res) {
+      await userInfo.create({ uid, name, gender, avatar})
+    } else {
+      await userInfo.update({name, gender, avatar}, {
+        where: {uid}
+      })
+    }
+    return ctx.body = {
+      code: "000000",
+      data: null,
+      msg: "ok"
+    }
+  }
+  static async getUserNameByuid(ctx) {
+    const { uid } = ctx.request.query
+    const result = await userInfo.findOne({
+      where: { uid },
+      attributes: ["name", "avatar"] 
+    })
+    return ctx.body = {
+      code: "000000",
+      data: result,
+      msg: "ok"
     }
   }
 }
