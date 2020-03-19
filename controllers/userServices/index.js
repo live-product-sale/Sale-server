@@ -6,23 +6,44 @@ const userInfo = require('../../modal/user/userinfo')
 const userModal = require('../../modal/user')
 
 class cusController {
+  //更新登陆状态
+  static async updateLogin (ctx) {
+    const { uid, cphone } = ctx.request.body
+    const result = await userModal.findOne({
+      where: { uid, cphone},
+      attributes: ["cpassword"]
+    })
+    const cpassword = result.dataValues.cpassword
+    const Info = await userModal.findOne({
+      where: { cphone, cpassword },
+      include: [userInfo],
+      attributes: { exclude: ["cpassword"]}
+    })
+    if(result) {
+      return ctx.body = {
+          code: "000000",
+          data: {
+            token: createToken({cphone, cpassword }),
+            userinfo: Info,
+            msg: "更新登陆状态OK"
+          }
+      }
+    }
+  }
   // 处理登陆
   static async login(ctx) {
     const { cphone, cpassword } = ctx.request.body
     const result = await userModal.findOne({
-      where: { cphone, cpassword }
+      where: { cphone, cpassword },
+      include: [userInfo],
+      attributes: { exclude: ["cpassword"]}
     })
     if(result !== null) {
       return ctx.body = {
         code: '000000',
         data: { 
           token: createToken({cphone, cpassword}),
-          userinfo: {
-            ...result.dataValues, 
-            cpassword: undefined,
-            createdAt: undefined, 
-            updatedAt: undefined
-          }
+          userinfo: result
         },
         msg: '登陆成功'
       }

@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:40:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-09 20:38:06
+ * @LastEditTime: 2020-03-18 20:47:59
  */
 const cartModal = require('../../modal/cart')
 const Op = require('sequelize').Op
@@ -92,6 +92,14 @@ class cartService {
       data: result,
       msg: "修改成功"
     }
+  }
+  // 清空购物车
+  static async  deleteAllCart(ctx) {
+    const { uid } = ctx.request.body
+    await cartModal.destroy({
+      where: {uid}
+    })
+    return ctx.body = { code: "000000", msg: "删除成功" }
   }
 }
 

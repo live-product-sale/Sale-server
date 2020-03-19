@@ -14,6 +14,8 @@ router.prefix('/user')
 router.get('/login/captcha', common.captcha)
 // 响应用户登陆
 router.post('/login', checkLogin, userServices.login)
+// 更新登陆信息
+router.post('/updateLogin', userServices.updateLogin)
 // 响应用户注册
 router.post('/register',IsMobile, IsMobileRegisted, checkMobCode, userServices.register)
 // 响应短信验证码

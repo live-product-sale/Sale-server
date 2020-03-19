@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:55:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-13 19:38:50
+ * @LastEditTime: 2020-03-18 20:09:48
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
@@ -27,6 +27,9 @@ const order = mysql.define('order', {
     type:sequelize.STRING
   },
   uid: {
+    type: sequelize.STRING
+  },
+  address_id: {
     type: sequelize.STRING
   }
 }, {

@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:02:35
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-13 21:56:22
+ * @LastEditTime: 2020-03-18 20:12:01
  */
 const orderModal = require('../../modal/order')
 const orderDetail = require('../../modal/order/order-detail')
@@ -46,8 +46,7 @@ class orderService {
    }
    // 创建订单
    static async createOrder(ctx) {
-     const { shopInfo, goodsInfo, uid } = ctx.request.body
-     let orderdetail = []
+     const { shopInfo, goodsInfo, uid, address_id } = ctx.request.body
      let total_price = 0
      const order_id = Date.now()
      shopInfo.forEach(item => {
@@ -56,9 +55,9 @@ class orderService {
      })
      goodsInfo.forEach(item => {
        item["order_id"] = order_id
+       item["address_id"] = address_id
        total_price = Number(item.goods_price) * Number(item.goods_num).toFixed(2)
      })
-     
      await orderModal.bulkCreate(shopInfo)
      await orderDetail.bulkCreate(goodsInfo)
      await payOrder.create({ order_id, uid, total_price })
@@ -84,9 +83,9 @@ class orderService {
    //确认支付
    static async confirePay(ctx) {
      const { uid , pay_type, order_id } = ctx.request.body
-     await orderModal.update({
-       order_state: 2
-     }, { where: { order_id, uid }})
+     await orderModal.update(
+       { order_state: 2 }, 
+       { where: { order_id, uid }})
      const result = await payOrder.update({
        pay_type,
        isSuccess: true
