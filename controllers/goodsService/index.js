@@ -4,10 +4,10 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 12:31:31
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-07 20:46:52
+ * @LastEditTime: 2020-03-12 20:38:01
  */
 const goodsModal = require('../../modal/goods')
-const sortModal = require('../../modal/sort')
+const sortModal = require('../../modal/rangesort')
 class goodService {
    // 根据shop_id 获取商品信息
    static async getGoodsByShopId(ctx) {

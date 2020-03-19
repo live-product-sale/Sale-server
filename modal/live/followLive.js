@@ -2,30 +2,27 @@
  * @Description: 
  * @Author: zhangmeng
  * @Github: https://github.com/ZNVICTORY
- * @Date: 2020-03-04 14:19:17
+ * @Date: 2020-03-11 21:31:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-04 14:23:19
+ * @LastEditTime: 2020-03-11 21:35:16
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
-const sort = mysql.define('sort', {
-  sort_id: {
-    type: sequelize.BIGINT,
-    primaryKey: true
-  },
-  sort_name: {
+
+const followLive = mysql.define("follow-live", {
+  uid: {
     type: sequelize.STRING
   },
-  sort_avatar: {
+  live_id: {
     type: sequelize.STRING
   }
 }, {
   timestamps: false
-});
+})
 
-sort.sync({
+followLive.sync({
   force: false
 }).then(() => {
-  console.log('sort is successful')
+  console.log("follow is success")
 })
-module.exports = sort
+module.exports =followLive

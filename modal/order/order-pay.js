@@ -2,33 +2,36 @@
  * @Description: 
  * @Author: zhangmeng
  * @Github: https://github.com/ZNVICTORY
- * @Date: 2020-03-04 13:25:58
+ * @Date: 2020-03-10 12:28:22
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-16 22:34:40
+ * @LastEditTime: 2020-03-13 17:27:34
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
-const user = require('./index')
 
-const userInfo = mysql.define('userInfo', {
-  name: {
+const payOrder = mysql.define('payOrder', {
+  order_id: {
     type: sequelize.STRING
   },
-  gender: {
+  uid: {
     type: sequelize.STRING
   },
-  avatar: {
+  total_price: {
     type: sequelize.STRING
+  },
+  pay_type: {
+    type: sequelize.STRING
+  },
+  isSuccess: {
+    type: sequelize.BOOLEAN,
+    defaultValue: false
   }
 }, {
   timestamps: false
 })
-userInfo.belongsTo(user, { foreignKey: "uid"})
-user.hasOne(userInfo, { foreignKey: "uid"})
-userInfo.sync({
+payOrder.sync({
   force: false
 }).then(() => {
-  console.log('userinfo is successful')
+  console.log('payOrder is success')
 })
-
-module.exports = userInfo
+module.exports = payOrder

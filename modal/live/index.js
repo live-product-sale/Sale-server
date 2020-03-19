@@ -41,6 +41,9 @@ const live = mysql.define('live', {
   shop_id: {
     type: Sequelize.STRING
   },
+  range_id: {
+    type: Sequelize.STRING
+  },
   sort_id: {
     type: Sequelize.STRING
   }

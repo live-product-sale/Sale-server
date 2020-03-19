@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const mysql = require('../../db/mysql/index')
+const live = require('../live')
 
 const shop = mysql.define('shop', {
   shop_id: {
@@ -22,7 +23,7 @@ const shop = mysql.define('shop', {
   freezeTableName: false,
   timestamps: false
 })
-
+// shop.belongsTo(live)
 shop.sync({
   force: false
 }).then(() => {
