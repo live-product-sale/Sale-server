@@ -47,6 +47,7 @@ class orderService {
    // 创建订单
    static async createOrder(ctx) {
      const { shopInfo, goodsInfo, uid, address_id } = ctx.request.body
+     console.log(shopInfo, goodsInfo, uid, address_id)
      let total_price = 0
      const order_id = Date.now()
      shopInfo.forEach(item => {

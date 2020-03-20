@@ -19,7 +19,7 @@ router.post('/updateLogin', userServices.updateLogin)
 // 响应用户注册
 router.post('/register',IsMobile, IsMobileRegisted, checkMobCode, userServices.register)
 // 响应短信验证码
-router.get('/register/sendMsg', IsMobile, IsMobileRegisted, common.getMsgCode)
+router.get('/register/sendMsg', IsMobile, common.getMsgCode)
 // 响应修改密码
 router.post('/modifyPass', IsMobile, checkMobCode ,userServices.modifyPass)
 // 获取用户信息
@@ -28,5 +28,7 @@ router.get('/userInfo', userServices.getUserInfo )
 router.post('/perfect', userServices.perfectUserInfo)
 // 获取用户名称
 router.get('/username', userServices.getUserNameByuid)
+// 密码管理
+router.post('/updatePassword', userServices.updatePassword)
 
 module.exports = router
