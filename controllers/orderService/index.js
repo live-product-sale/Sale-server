@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:02:35
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-18 20:12:01
+ * @LastEditTime: 2020-03-20 21:51:08
  */
 const orderModal = require('../../modal/order')
 const orderDetail = require('../../modal/order/order-detail')
@@ -164,6 +164,7 @@ class orderService {
        msg: "ok"
      }
    }
+   // 确认订单
    static async confirmOrder(ctx) {
      const { order_id, uid } = ctx.request.body 
      await orderModal.update({
@@ -173,6 +174,19 @@ class orderService {
        code: "000000",
        data: null,
        msg: "ok"
+     }
+   }
+   // 完成评论
+   static async finishAssess(ctx) {
+     const { uid, order_id, score, assess} = ctx/request.body
+     console.log(score, assess)
+     await orderModal.update({
+       order_state: 4
+     }, { where: { order_id, uid }})
+     return ctx.body = {
+       code: "000000",
+       data: null,
+       msg: "完成评论"
      }
    }
 }
