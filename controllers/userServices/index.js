@@ -13,7 +13,7 @@ class cusController {
       where: { uid, cphone},
       attributes: ["cpassword"]
     })
-    const cpassword = result.dataValues.cpassword
+    const cpassword = result.cpassword
     const Info = await userModal.findOne({
       where: { cphone, cpassword },
       include: [userInfo],
@@ -63,6 +63,9 @@ class cusController {
       { uid, cphone, cpassword },
       { include: [userInfo]}
     )
+    await userInfo.create({
+      uid
+    })
     if(result) {
       return ctx.body = {
         code: '000000',
@@ -159,6 +162,29 @@ class cusController {
       code: "000000",
       data: result,
       msg: "ok"
+    }
+  }
+  static async updatePassword(ctx) {
+    const {uid, cphone, oldPassword, newPassword} = ctx.request.body
+    const result = await userModal.findOne({
+      where: { uid, cphone },
+      attributes: ["cpassword"]
+    })
+    if(result.cpassword === oldPassword) {
+      await userModal.update({
+        cpassword: newPassword
+      }, { where: { uid, cphone }})
+      return ctx.body = {
+        code: "000000",
+        data: null,
+        msg: "修改成功"
+      }
+    } else {
+      return ctx.body = {
+        code: "000001",
+        data: null,
+        msg: "原密码错误"
+      }
     }
   }
 }
