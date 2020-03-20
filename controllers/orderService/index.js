@@ -19,7 +19,7 @@ class orderService {
      const { uid } = ctx.request.query
      const cartChecked = await cartMoal.findAll({
        where: { uid, goods_checked: true },
-       attributes: { exclude: ["uid", "goods_stock", "cart_id"]}
+       attributes: { exclude: ["uid", "goods_stock", "cart_id", "id"]}
      })
      const shopId = cartChecked.map(item => { 
         return item.shop_id 
@@ -52,13 +52,15 @@ class orderService {
      const order_id = Date.now()
      shopInfo.forEach(item => {
         item["order_id"] = order_id, 
-        item["uid"] = uid
+        item["uid"] = uid,
+        item["address_id"] = address_id
+        item.id = undefined
      })
      goodsInfo.forEach(item => {
        item["order_id"] = order_id
-       item["address_id"] = address_id
        total_price = Number(item.goods_price) * Number(item.goods_num).toFixed(2)
      })
+    //  console.log(shopInfo)
      await orderModal.bulkCreate(shopInfo)
      await orderDetail.bulkCreate(goodsInfo)
      await payOrder.create({ order_id, uid, total_price })

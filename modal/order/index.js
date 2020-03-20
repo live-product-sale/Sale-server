@@ -10,6 +10,10 @@ const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const orderDetail = require('./order-detail')
 const order = mysql.define('order', {
+  id: {
+     type:sequelize.BIGINT,
+     primaryKey: true
+  },
   order_id: {
     type: sequelize.STRING
   }, 
