@@ -26,7 +26,7 @@ class AddressServie {
      const data = ctx.request.body
      const address_id = data.id
      const uid = data.uid
-    //  console.log(data)
+     console.log(data)
      if(data.action == "edit") {
        data.action = undefined
        console.log(data.isDefault)
@@ -69,16 +69,42 @@ class AddressServie {
    }
    // 修改地址状态
    static async changeAddressStatu (ctx) {
-     const {uid} = ctx.request.query
-     await addressModal.update(
-      {isDefault: false }, 
-      {
-       where: { uid, isDefault: true }
+     const {uid, id, isDefault} = ctx.request.query
+     console.log(id)
+     const defaultAddress = await addressModal.findOne({
+       where: { uid, isDefault: true},
+       attributes: ["id", "uid"]
      })
+     if(!defaultAddress) {
+      await addressModal.update(
+        {isDefault }, 
+        { where: { uid, id } })
+     } else {
+      await addressModal.update({
+        isDefault: false
+      }, { where: {id: defaultAddress.id, uid: defaultAddress.uid}})
+      await addressModal.update(
+        {isDefault }, 
+        { where: { uid, id } })
+     }
+    
+     
      return ctx.body = {
        code: "000000",
        data: null,
        msg: "ok"
+     }
+   }
+   // 删除地址
+   static async deleteAddress(ctx) {
+     const {id, uid} = ctx.request.body
+     const result = await addressModal.destroy({
+       where: { id, uid }
+     })
+     return ctx.body = {
+       code: "000000",
+       data: result,
+       msg: "删除成功"
      }
    }
 }

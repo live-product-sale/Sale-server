@@ -58,7 +58,7 @@ class orderService {
      })
      goodsInfo.forEach(item => {
        item["order_id"] = order_id
-       total_price = Number(item.goods_price) * Number(item.goods_num).toFixed(2)
+       total_price += Number(item.goods_price) * Number(item.goods_num).toFixed(2)
      })
     //  console.log(shopInfo)
      await orderModal.bulkCreate(shopInfo)
@@ -151,7 +151,7 @@ class orderService {
    }
    // 删除订单
    static async deleteOrder(ctx) {
-     const { order_id, uid } = ctx.request.body
+     const { order_id, uid} = ctx.request.body
      await orderModal.destroy({
        where: { order_id, uid }
      })
@@ -169,10 +169,10 @@ class orderService {
    }
    // 确认订单
    static async confirmOrder(ctx) {
-     const { order_id, uid } = ctx.request.body 
+     const { order_id, uid, shop_id } = ctx.request.body 
      await orderModal.update({
        order_state: 3
-     }, { where: { order_id, uid }})
+     }, { where: { order_id, uid, shop_id }})
      return ctx.body = {
        code: "000000",
        data: null,
@@ -181,7 +181,7 @@ class orderService {
    }
    // 完成评论
    static async finishAssess(ctx) {
-     const { uid, order_id, score, assess} = ctx/request.body
+     const { uid, order_id, score, assess} = ctx.request.body
      console.log(score, assess)
      await orderModal.update({
        order_state: 4

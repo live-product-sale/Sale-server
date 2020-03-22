@@ -10,9 +10,15 @@
  const router = require('koa-router')()
  const AddressService = require('../../controllers/addresService')
  router.prefix('/address')
+ // 获取用户地址信息
  router.get('/addressList', AddressService.getAddressData)
+ // 添加地址
  router.post('/createOrupdate',AddressService.createOrupdate )
+ // 获取默认地址
  router.get('/default', AddressService.getDefaultAddress)
+ // 改变默认地址
  router.get('/changeDefault',AddressService.changeAddressStatu )
+ // 删除地址
+ router.post('/deletebyid', AddressService.deleteAddress)
 
  module.exports = router
