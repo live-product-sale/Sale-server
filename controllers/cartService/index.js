@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:40:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-21 09:10:16
+ * @LastEditTime: 2020-03-23 10:08:04
  */
 const cartModal = require('../../modal/cart')
 const Op = require('sequelize').Op
@@ -24,7 +24,7 @@ class cartService {
   // 添加商品到购物车
   static async increaseCart(ctx) {
     const data = ctx.request.body
-    console.log(data)
+    // console.log(data)
     const result = await cartModal.findAll({
       where : { 
         shop_id: data.shop_id,
@@ -34,7 +34,7 @@ class cartService {
         specification: data.specification,
       }
     })
-    console.log(result)
+    // console.log(result)
     if(result.length > 0) {
       await cartModal.update({                                                                                         
         goods_num: parseInt(result[0].goods_num) + parseInt(data.goods_num)
@@ -51,9 +51,9 @@ class cartService {
     } else {
       const cart_id = Date.now().toString().substr(6,6)+Math.random().toString().substr(2,2)
       data["cart_id"] = cart_id
-      console.log(data)
+      // console.log(data)
       const result = await cartModal.create(data)
-      console.log(result)
+      // console.log(result)
       return ctx.body = {
         code: "000000",
         data: null,

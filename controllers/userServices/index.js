@@ -63,9 +63,7 @@ class cusController {
       { uid, cphone, cpassword },
       { include: [userInfo]}
     )
-    await userInfo.create({
-      uid
-    })
+    await userInfo.create({ uid })
     if(result) {
       return ctx.body = {
         code: '000000',

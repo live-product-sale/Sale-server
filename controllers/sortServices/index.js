@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-12 20:29:12
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-12 21:30:36
+ * @LastEditTime: 2020-03-23 11:57:04
  */
 const rangeModal = require('../../modal/rangesort')
 const sortModal = require('../../modal/rangesort/sort')
@@ -37,6 +37,28 @@ class sortService {
            msg: "ok"
         }
       }
-      
+      // 获取直播间的类型范围
+      static async getAllRange(ctx) {
+        const result = await rangeModal.findAll(
+          {attributes: ["name"]}
+        )
+        return ctx.body = {
+          code: "000000",
+          data: result,
+          msg: "ok"
+        }
+      }
+      // 根据range_id 获取sort
+      static async getSortByRangeId(ctx) {
+        const { range_id } = ctx.request.query
+        const result = await sortModal.findAll({
+          where: { range_id }
+        })
+        return ctx.body = {
+          code: "000000",
+          data: result,
+          msg: "ok"
+        }
+      }
 }
 module.exports = sortService

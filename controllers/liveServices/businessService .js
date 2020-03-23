@@ -1,28 +1,44 @@
 const liveModal = require('../../modal/live/index')
+const sortModal = require('../../modal/rangesort/sort')
+const Op = require('sequelize').Op
 const { 
   getPushUrl, 
   getPlayUrl, 
   generateId 
 } = require('../../util/utils')
 
+/**
+ * 适配器直播间参数
+ * @param {Object} data 
+ * @returns liveObj
+ */
+const adapterArg = async (data) => {
+  let liveObj = {}
+  liveObj["live_id"] = Date.now().toString().substr(8,5)+Math.random().toString().substr(8,5)
+  liveObj["live_push"] = getPushUrl(liveObj["live_id"] )
+  liveObj["live_play"] = getPlayUrl(liveObj["live_id"] )
+  for(var item in data) {
+    liveObj[item] = data[item]
+  }
+  const sort_name = data.sort_name
+  const sort = await sortModal.findOne({
+    where: { name: sort_name, range_id: data.range_id},
+    attributes: [ "id"]
+  })
+  liveObj["sort_id"] = sort.id
+  return liveObj
+}
+
 class busService {
   // 创造直播室
   static async createLive(ctx) {
      const data = ctx.request.body
-     const live_id = Date.now().toString().substr(8,5)+Math.random().toString().substr(8,5)
-     const live_push = getPushUrl(live_id)
-     const live_play = getPlayUrl(live_id)
-     const result = await liveModal.create({
-       live_id,
-       ...data,
-       live_push,
-       live_play
-     })
-     console.log(live_push, live_play )
+     const liveObj = await adapterArg(data)
+     const result = await liveModal.create(liveObj)
      return ctx.body = {
        code: '000000',
        data: {...result.dataValues, live_play: undefined},
-       msg: 'ok'
+       msg: '创建直播间成功'
      }
   }
   // 根据商店Id获取直播间
