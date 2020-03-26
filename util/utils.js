@@ -50,10 +50,24 @@ const createToken = (data) => {
 const generateId = () => {
   return Math.random().toString().substr(3, 8) + Date.now().toString(36)
 }
-
+/**
+ *  统一响应格式
+ *  @param { String } code
+ *  @param { any } data
+ *  @param { String }  msg
+ *  @returns { Object } result
+ */
+const ResFormat = (code, data, msg) => {
+  return {
+    code, 
+    data,
+    msg
+  }
+}
 module.exports = {
   getPushUrl,
   getPlayUrl,
   createToken,
-  generateId
+  generateId,
+  ResFormat
 }

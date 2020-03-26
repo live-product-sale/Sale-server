@@ -2,17 +2,17 @@ const Sequelize = require('sequelize')
 const mysql = require('../../db/mysql/index')
 
 const Bus_user = mysql.define('bus_user', {
-  uuid: {
-    type: Sequelize.UUID,
+  uid: {
+    type: Sequelize.STRING,
     PrimaryKey: true
   },
-  uname: {
+  name: {
     type: Sequelize.STRING
   },
-  uphone: {
+  phone: {
     type: Sequelize.STRING
   },
-  upassword: {
+  password: {
     type: Sequelize.STRING
   }
 }, {
