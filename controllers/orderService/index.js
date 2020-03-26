@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:02:35
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-20 21:51:08
+ * @LastEditTime: 2020-03-26 21:52:09
  */
 const orderModal = require('../../modal/order')
 const orderDetail = require('../../modal/order/order-detail')
@@ -12,6 +12,7 @@ const payOrder = require('../../modal/order/order-pay')
 const cartMoal = require('../../modal/cart')
 const shopMoal = require('../../modal/shop')
 const Op = require('sequelize').Op
+const { ResFormat } = require('../../util/utils')
 
 class orderService {
   // 订单数据模版
@@ -38,16 +39,13 @@ class orderService {
          }
        })
      })
-     return ctx.body = {
-       code: "000000",
-       data: shopInfo,
-       msg: "ok"
-     } 
+     return ctx.body = ResFormat("000000", shopInfo, "ok")
    }
+
    // 创建订单
    static async createOrder(ctx) {
      const { shopInfo, goodsInfo, uid, address_id } = ctx.request.body
-     console.log(shopInfo, goodsInfo, uid, address_id)
+    //  console.log(shopInfo, goodsInfo, uid, address_id)
      let total_price = 0
      const order_id = Date.now()
      shopInfo.forEach(item => {
@@ -64,13 +62,9 @@ class orderService {
      await orderModal.bulkCreate(shopInfo)
      await orderDetail.bulkCreate(goodsInfo)
      await payOrder.create({ order_id, uid, total_price })
-     return ctx.body = {
-       code: "000000",
-       data: { order_id },
-       msg: "创建成功"
-     }
-
+     return ctx.body = ResFormat("000000", { order_id }, "创建成功")
    }
+
    // 获取未支付的订单
    static async getPayOrder(ctx) {
      const { uid, order_id } = ctx.request.query
@@ -81,8 +75,9 @@ class orderService {
          isSuccess: false
        }
      })
-     return ctx.body = { code: "000000", data: result, msg: "ok" }
+     return ctx.body = ResFormat("000000", result , "ok")
    }
+
    //确认支付
    static async confirePay(ctx) {
      const { uid , pay_type, order_id } = ctx.request.body
@@ -95,12 +90,9 @@ class orderService {
      }, {
        where: { uid, order_id }
      })
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", result , "ok")
    }
+
    // 获取订单数据根据order_state
    static async getOrderList(ctx) {
      const { order_state, uid, offset, limit } = ctx.request.query
@@ -125,12 +117,9 @@ class orderService {
          }
        }
      })
-     return ctx.body = {
-       code: "000000",
-       data: {orderList, orderGoods },
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", {orderList, orderGoods } , "ok")
    }
+
    // 取消订单
    static async cancelOrder(ctx) {
      const { order_id, order_state, uid} = ctx.request.body
@@ -143,12 +132,9 @@ class orderService {
      await payOrder.destroy({
        where: {uid, order_id}
      })
-     return ctx.body = {
-       code: "000000",
-       data: null,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", null , "ok")
    }
+
    // 删除订单
    static async deleteOrder(ctx) {
      const { order_id, uid} = ctx.request.body
@@ -161,36 +147,35 @@ class orderService {
      await payOrder.destroy({
        where: { order_id, uid}
      })
-     return ctx.body = {
-       code: "000000",
-       data: null,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", null , "ok")
    }
+
    // 确认订单
    static async confirmOrder(ctx) {
      const { order_id, uid, shop_id } = ctx.request.body 
      await orderModal.update({
        order_state: 3
      }, { where: { order_id, uid, shop_id }})
-     return ctx.body = {
-       code: "000000",
-       data: null,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", null , "ok")
    }
+
    // 完成评论
    static async finishAssess(ctx) {
      const { uid, order_id, score, assess} = ctx.request.body
-     console.log(score, assess)
+    //  console.log(score, assess)
      await orderModal.update({
        order_state: 4
      }, { where: { order_id, uid }})
-     return ctx.body = {
-       code: "000000",
-       data: null,
-       msg: "完成评论"
-     }
+     return ctx.body = ResFormat("000000", null , "完成评论")
+   }
+
+   // 根据shop_id 获取订单
+   static async getOrderByshop(ctx) {
+     const { shop_id } = ctx.request.query
+     const result = await orderModal.findAll({
+       where: { shop_id}
+     })
+     return ctx.body = ResFormat("000000", result, "获取订单")
    }
 }
 module.exports = orderService

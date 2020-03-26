@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:04:05
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-20 21:47:37
+ * @LastEditTime: 2020-03-26 21:40:53
  */
 const router = require('koa-router')()
 const orderService = require('../../controllers/orderService')
@@ -27,5 +27,7 @@ router.post('/deleteOrder', orderService.deleteOrder)
 router.post('/confirmOrder', orderService.confirmOrder)
 // 评价订单
 router.post('/assess', orderService.finishAssess)
+// 根据shop_id 获取 订单信息
+router.get('/orderbyshop', orderService.getOrderByshop)
 
 module.exports = router
