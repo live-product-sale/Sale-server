@@ -18,6 +18,7 @@ class Common {
   // 获取短信验证码
   static async getMsgCode(ctx) {
     const { cphone } = ctx.request.query
+    console.log(cphone)
     const code = parseInt(Math.random()*9000 + 1000)
     setItem('mobileCode', code)
     const result = await sendPhone(code, cphone)

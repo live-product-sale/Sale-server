@@ -7,7 +7,9 @@
  * @LastEditTime: 2020-03-23 10:08:04
  */
 const cartModal = require('../../modal/cart')
-const Op = require('sequelize').Op
+// const Op = require('sequelize').Op
+const { ResFormat } = require('../../util/utils')
+
 class cartService {
   //根据用户id 获取购物车信息
   static async getCart(ctx) {
@@ -15,11 +17,7 @@ class cartService {
     const result = await cartModal.findAll({
       where: { uid }
     })
-    return ctx.body = {
-      code: "000000",
-      data: result,
-      msg: 'OK'
-    }
+    return ctx.body = ResFormat("000000", result, "ok")
   }
   // 添加商品到购物车
   static async increaseCart(ctx) {
@@ -43,22 +41,12 @@ class cartService {
           cart_id: result[0].cart_id
         }
       })
-      return ctx.body = {
-        code: "000000",
-        data: null,
-        msg: "ok"
-      }
+      return ctx.body = ResFormat("000000", null, "ok")
     } else {
       const cart_id = Date.now().toString().substr(6,6)+Math.random().toString().substr(2,2)
       data["cart_id"] = cart_id
-      // console.log(data)
-      const result = await cartModal.create(data)
-      // console.log(result)
-      return ctx.body = {
-        code: "000000",
-        data: null,
-        msg: "ok"
-      }
+      await cartModal.create(data)
+      return ctx.body = ResFormat("000000", null, "添加成功")
     } 
   }
   // 删除商品在购物车中
@@ -70,11 +58,7 @@ class cartService {
         cart_id
       }
     })
-    return ctx.body = {
-      code: "000000",
-      data: null,
-      msg: "删除成功"
-    }
+    return ctx.body = Resformat("000000", null, "删除成功")
   }
   // 改变购物车中的状态
   static async changCartstatus(ctx) {
@@ -82,23 +66,15 @@ class cartService {
      const result = await cartModal.update({
        goods_checked: status
      }, { where: { cart_id }})
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "修改成功"
-     }
+     return ctx.body = Resformat("000000", result, "修改成功")
   }
   // 改变购物车中商品的数量
   static async changCartGoodsNum(ctx) {
     const { cart_id, goods_num } = ctx.request.query
-    const result  = await cartModal.update({
+    await cartModal.update({
       goods_num
     }, { where: { cart_id }})
-    return ctx.body = {
-      code: "000000",
-      data: result,
-      msg: "修改成功"
-    }
+    return ctx.body = Resformat("000000", null, "修改成功")
   }
   // 清空购物车
   static async  deleteAllCart(ctx) {
@@ -106,7 +82,7 @@ class cartService {
     await cartModal.destroy({
       where: {uid}
     })
-    return ctx.body = { code: "000000", msg: "删除成功" }
+    return ctx.body = Resformat("000000", null, "删除成功")
   }
 }
 

@@ -20,12 +20,15 @@ const adapterArg = async (data) => {
   for(var item in data) {
     liveObj[item] = data[item]
   }
+  // console.log(data)
   const sort_name = data.sort_name
   const sort = await sortModal.findOne({
     where: { name: sort_name, range_id: data.range_id},
     attributes: [ "id"]
   })
+  console.log(sort)
   liveObj["sort_id"] = sort.id
+
   return liveObj
 }
 

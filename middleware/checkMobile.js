@@ -28,7 +28,7 @@ const IsMobile = async (ctx, next) => {
  * @param {*} next 
  */
 const IsMobileRegisted = async (ctx, next) => {
-  let cphone
+  let cphone;
   if(ctx.request.method === 'GET') {
      cphone = ctx.request.query.cphone
   } else {

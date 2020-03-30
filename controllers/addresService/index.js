@@ -7,6 +7,7 @@
  * @LastEditTime: 2020-03-10 22:14:30
  */
 const addressModal = require('../../modal/address')
+const { ResFormat } = require('../../util/utils')
 
 class AddressServie {
   // 获取用户的收件地址
@@ -15,11 +16,7 @@ class AddressServie {
       const data = await addressModal.findAll({
         where: { uid }
       })
-      return ctx.body = {
-        code: "000000",
-        data,
-        msg: "ok"
-      }
+      return ctx.body = ResFormat("000000", data, "ok")
    }
    //更新或创建地址
    static async createOrupdate(ctx) {
@@ -46,11 +43,7 @@ class AddressServie {
      } else {
        await addressModal.create({...data, action: undefined })
      } 
-     return ctx.body = {
-       code: "000000",
-       data: null,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", null, "ok")
    }
    // 获取默认地址
    static async getDefaultAddress(ctx) {
@@ -61,11 +54,7 @@ class AddressServie {
          isDefault: true
        }
      })
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", result , "ok")
    }
    // 修改地址状态
    static async changeAddressStatu (ctx) {
@@ -101,11 +90,7 @@ class AddressServie {
      const result = await addressModal.destroy({
        where: { id, uid }
      })
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "删除成功"
-     }
+     return ctx.body = ResFormat("000000", result , "删除成功")
    }
 }
 module.exports = AddressServie
