@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:11:59
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-10 22:14:30
+ * @LastEditTime: 2020-03-28 14:04:35
  */
 const addressModal = require('../../modal/address')
 const { ResFormat } = require('../../util/utils')
@@ -26,7 +26,7 @@ class AddressServie {
      console.log(data)
      if(data.action == "edit") {
        data.action = undefined
-       console.log(data.isDefault)
+      //  console.log(data.isDefault)
        await addressModal.update({
          name: data.name,
          mobile: data.mobile,

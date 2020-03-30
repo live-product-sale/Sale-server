@@ -4,12 +4,14 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-19 12:50:53
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-19 14:47:48
+ * @LastEditTime: 2020-03-26 22:11:49
  */
 const rangeModal = require('../../modal/rangesort/index')
 const sortModal = require('../../modal/rangesort/sort')
 const liveModal = require('../../modal/live/index')
-const Op = require('sequelize').Op;
+const Op = require('sequelize').Op
+const { ResFormat } = require('../../util/utils')
+
 class searchService {
   static async search(ctx) {
     const { key } = ctx.request.query
@@ -32,11 +34,7 @@ class searchService {
        }
     })
     // console.log(result)
-    return ctx.body = {
-      code: "000000",
-      data: result,
-      msg: "ok"
-    }
+    return ctx.body = ResFormat("000000", result, "ok")
   }
 }
 

@@ -1,5 +1,6 @@
 const captchapng = require('captchapng')
 const { setItem } =  require('../util/redis/index')
+const { ResFormat } = require('../util/utils')
 const sendPhone = require('../util/tool/phone')
 
 class Common {
@@ -23,17 +24,9 @@ class Common {
     setItem('mobileCode', code)
     const result = await sendPhone(code, cphone)
     if(JSON.parse(result).return_code == "00000") {
-      return ctx.body = {
-        code: '000000',
-        data: null,
-        msg: '发送成功'
-      }
+      return ctx.body = ResFormat("000000", null, "发送成功")
     } else {
-      return ctx.body = {
-        code: '000005',
-        data: JSON.parse(result).return_code,
-        msg: '发送失败'
-      }
+      return ctx.body = ResFormat("000006", JSON.parse(result).return_code, "发送失败")
     }
   }
   

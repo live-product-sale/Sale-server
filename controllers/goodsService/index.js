@@ -4,10 +4,11 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 12:31:31
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-12 20:38:01
+ * @LastEditTime: 2020-03-30 20:06:12
  */
 const goodsModal = require('../../modal/goods')
 const sortModal = require('../../modal/rangesort')
+const { ResFormat } = require('../../util/utils')
 
 class goodService {
    // 根据shop_id 获取商品信息
@@ -16,11 +17,7 @@ class goodService {
        const result = await goodsModal.findAll({
          where: { shop_id }
        })
-       return ctx.body = { 
-         code: "000000",
-         data: result,
-         msg: 'ok'
-       }
+       return ctx.body = ResFormat("000000", result, "ok")
    }
    // 添加商品
    static async createGoods(ctx) {
@@ -30,11 +27,7 @@ class goodService {
        goods_id,
        ...data
      })
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", result, "添加成功")
    }
    // 根据goods_id 获取信息
    static async getGoodsByGoodsId(ctx) {
@@ -42,11 +35,7 @@ class goodService {
      const result = await goodsModal.findOne({
        where: { goods_id }
      })
-     return ctx.body = {
-        code: "000000",
-        data: result,
-        msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", result, "ok")
    }
 }
 module.exports = goodService

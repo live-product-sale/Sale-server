@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:40:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-23 10:08:04
+ * @LastEditTime: 2020-03-30 20:21:02
  */
 const cartModal = require('../../modal/cart')
 // const Op = require('sequelize').Op
@@ -58,7 +58,7 @@ class cartService {
         cart_id
       }
     })
-    return ctx.body = Resformat("000000", null, "删除成功")
+    return ctx.body = ResFormat("000000", null, "删除成功")
   }
   // 改变购物车中的状态
   static async changCartstatus(ctx) {
@@ -66,7 +66,7 @@ class cartService {
      const result = await cartModal.update({
        goods_checked: status
      }, { where: { cart_id }})
-     return ctx.body = Resformat("000000", result, "修改成功")
+     return ctx.body = ResFormat("000000", result, "修改成功")
   }
   // 改变购物车中商品的数量
   static async changCartGoodsNum(ctx) {
@@ -74,7 +74,7 @@ class cartService {
     await cartModal.update({
       goods_num
     }, { where: { cart_id }})
-    return ctx.body = Resformat("000000", null, "修改成功")
+    return ctx.body = ResFormat("000000", null, "修改成功")
   }
   // 清空购物车
   static async  deleteAllCart(ctx) {
@@ -82,7 +82,7 @@ class cartService {
     await cartModal.destroy({
       where: {uid}
     })
-    return ctx.body = Resformat("000000", null, "删除成功")
+    return ctx.body = ResFormat("000000", null, "删除成功")
   }
 }
 

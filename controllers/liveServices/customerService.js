@@ -4,11 +4,13 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-12 22:47:51
+ * @LastEditTime: 2020-03-30 20:10:48
  */
 const liveModal = require('../../modal/live')
 const followLive = require('../../modal/live/followLive')
 const Op = require('sequelize').Op
+const { ResFormat } = require('../../util/utils')
+
 class customerService {
   // 按分页查询直播间信息
    static async getLiveList(ctx) {
@@ -18,11 +20,7 @@ class customerService {
         limit: parseInt(limit),
         attributes: { exclude: ['live_push', 'live_play']}
       })
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", result, "ok")
    }
    // 根据Live_id获取直播间拉流信息
    static async getLivePlay(ctx) {
@@ -32,11 +30,7 @@ class customerService {
        where: { live_id },
        attributes: { exclude: ['live_push', 'shop_slogan', 'good_price', 'good_avatar', 'status', 'sort_id']}
      })
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", result, "ok")
    }
    // 关注直播间 或取消关注
    static async attentionLive(ctx) {
@@ -56,13 +50,9 @@ class customerService {
          }
        })
      }
-
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "OK"
-     }
+     return ctx.body = ResFormat("000000", result, "ok")
    }
+   // 获取关注的直播间
    static async getAttentionLive(ctx) {
      const { uid } = ctx.request.query
      const live_id = await followLive.findAll({
@@ -71,11 +61,7 @@ class customerService {
      })
      let id = live_id.map(item => { return item.live_id})
      if(live_id.length === 0) {
-       return ctx.body = {
-         code: "000000",
-         data: [],
-         msg: "关注为空"
-       }
+       return ctx.body = ResFormat("000000", [], "关注为空")
      }
      const result = await liveModal.findAll({
        where: {
@@ -84,23 +70,16 @@ class customerService {
          }
        }
      })
-     return ctx.body = {
-       code: "000000",
-       data: result,
-       msg: "ok"
-     }
+     return ctx.body = ResFormat("000000", result, "ok")
    }
+   // 按照分类ID 获取直播间
    static async getLiveBySort(ctx) {
      const data = ctx.request.query
      const result = await liveModal.findAll({
            where: {...data}, 
            attributes: { exclude: ["live_push"]}
         })
-       return ctx.body = {
-        code: "000000",
-        data: result,
-        msg: "ok"
-      }    
+      return ctx.body = ResFormat("000000", result, "ok") 
    }
 }
 

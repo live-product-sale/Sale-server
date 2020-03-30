@@ -4,10 +4,12 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 11:24:19
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-07 10:03:34
+ * @LastEditTime: 2020-03-30 20:13:05
  */
 const { generateId } = require('../../util/utils')
 const shopModal = require('../../modal/shop')
+const { ResFormat } = require('../../util/utils')
+
 class shopService {
   // 用户创建商店
   static async createShop(ctx) {
@@ -19,11 +21,7 @@ class shopService {
       shop_name,
       shop_avatar
     })
-    return ctx.body = {
-      code: '000000',
-      msg: 'ok',
-      data: result
-    }
+    return ctx.body = ResFormat("000000", result, "创建成功")
   }
   // 根据uid获取商店
   static async getShopInfo(ctx) {
@@ -31,11 +29,7 @@ class shopService {
     const result = await shopModal.findAll({
       where: { uid }
     })
-    return ctx.body = {
-      code: "000000",
-      data: result,
-      msg: 'ok'
-    }
+    return ctx.body = ResFormat("000000", result, "ok")
   }
   //根据shop_id 获取信息
   static async getShopByShopId(ctx) {
@@ -43,11 +37,7 @@ class shopService {
     const result = await shopModal.findOne({
       where: { shop_id }
     })
-    return ctx.body = {
-      code: "000000",
-      data: result,
-      msg: "ok"
-    }
+    return ctx.body = ResFormat("000000", result, "ok")
   }
 }
 module.exports = shopService

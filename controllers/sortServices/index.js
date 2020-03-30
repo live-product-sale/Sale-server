@@ -4,10 +4,12 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-12 20:29:12
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-23 11:57:04
+ * @LastEditTime: 2020-03-30 20:15:20
  */
 const rangeModal = require('../../modal/rangesort')
 const sortModal = require('../../modal/rangesort/sort')
+const { ResFormat } = require('../../util/utils')
+
 class sortService {
       // 添加直播类型
       static async addToSort(ctx) {
@@ -22,7 +24,7 @@ class sortService {
           { range_id: 7, name: "其他"}
         ]
         await rangeModal.bulkCreate(data)
-        return ctx.body = { code: "000000", data: null, msg: "ok"}
+        return ctx.body = ResFormat("000000", null, "ok")
       }
       // 根据range_id 获取具体产品类型
       static async getSortByRange(ctx) {
@@ -31,22 +33,14 @@ class sortService {
           where: { range_id }
         })
         result.unshift({ name: "全部"})
-        return ctx.body = {
-           code: "000000",
-           data: result,
-           msg: "ok"
-        }
+        return ctx.body = ResFormat("000000", result, "ok")
       }
       // 获取直播间的类型范围
       static async getAllRange(ctx) {
         const result = await rangeModal.findAll(
           {attributes: ["name"]}
         )
-        return ctx.body = {
-          code: "000000",
-          data: result,
-          msg: "ok"
-        }
+        return ctx.body = ResFormat("000000", result, "ok")
       }
       // 根据range_id 获取sort
       static async getSortByRangeId(ctx) {
@@ -54,11 +48,7 @@ class sortService {
         const result = await sortModal.findAll({
           where: { range_id }
         })
-        return ctx.body = {
-          code: "000000",
-          data: result,
-          msg: "ok"
-        }
+        return ctx.body = ResFormat("000000", result, "ok")
       }
 }
 module.exports = sortService
