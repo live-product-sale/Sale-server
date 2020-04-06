@@ -39,8 +39,8 @@ class busService {
     const data = ctx.request.body
     const liveObj = await adapterArg(data)
     const result = await liveModal.create(liveObj)
-    const data = { ...result.dataValues, live_play: undefined },
-    return ctx.body = ResFormat(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
+    const content = { ...result.dataValues, live_play: undefined }
+    return ctx.body = ResFormat(resCode.SUCCESS, content, errMsg[resCode.SUCCESS])
   }
   // 根据商店Id获取直播间
   static async getLiveByShopId(ctx) {

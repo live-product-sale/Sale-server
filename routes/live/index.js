@@ -4,7 +4,7 @@ const CusServices = require('../../controllers/liveServices/customerService')
 router.prefix('/live')
 
 // 创建直播室
-router.post('/create', BusServices.createLive)  
+router.post('/create', BusServices.createLive)
 // 根据商店shop_Id获取直播间
 router.get('/livebyshop', BusServices.getLiveByShopId)
 // 根据直播live_id获取信息

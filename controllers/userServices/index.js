@@ -24,10 +24,10 @@ class cusController {
     const data = {
       token: createToken({cphone, cpassword }),
       userinfo: Info
-    },
+    }
     if(result) {
       return ctx.body = ResFormat(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
-    } 
+    }
   }
   // 处理登陆
   static async login(ctx) {
@@ -48,12 +48,14 @@ class cusController {
   static async register(ctx) {
     const { cpassword, cphone } = ctx.request.body
     const uid = generateId()
-    const result = await userModal.create(
+    const user = await userModal.findOne({
+      where: { cphone }
+    })
+    await userModal.create(
       { uid, cphone, cpassword },
-      { include: [userInfo]}
     )
     await userInfo.create({ uid })
-    if(result) {
+    if(!user) {
       return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     } else {
       return ctx.body = ResFormat(resCode.EXIST, null, errMsg[resCode.EXIST])
@@ -103,7 +105,7 @@ class cusController {
     }
     return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
   }
-
+   
   static async getUserNameByuid(ctx) {
     const { uid } = ctx.request.query
     const result = await userInfo.findOne({
@@ -112,7 +114,7 @@ class cusController {
     })
     return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
   }
-
+  // 更新密码
   static async updatePassword(ctx) {
     const {uid, cphone, oldPassword, newPassword} = ctx.request.body
     const result = await userModal.findOne({
