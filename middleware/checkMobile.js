@@ -1,5 +1,6 @@
 const userModal = require('../modal/user')
-
+const { ResFormat } = require('../util/utils')
+const { resCode, errMsg } = require('../util/errorCode')
 /**
  * 手机号是为空
  * @param {*} ctx 
@@ -7,18 +8,14 @@ const userModal = require('../modal/user')
  */
 const IsMobile = async (ctx, next) => {
   let _cphone
-  if(ctx.request.method === 'GET') {
-     _cphone = ctx.request.query.cphone
+  if (ctx.request.method === 'GET') {
+    _cphone = ctx.request.query.cphone
   } else {
-     _cphone = ctx.request.body.cphone
+    _cphone = ctx.request.body.cphone
   }
   console.log(_cphone)
-  if(_cphone === '') {
-    return ctx.body = {
-      code: '000001',
-      data: null,
-      msg: '手机号不存在'
-    }
+  if (_cphone === '') {
+    return ctx.body = ResFormat(resCode.LACK, null, errMsg[resCode.LACK])
   }
   await next()
 }
@@ -29,20 +26,16 @@ const IsMobile = async (ctx, next) => {
  */
 const IsMobileRegisted = async (ctx, next) => {
   let cphone;
-  if(ctx.request.method === 'GET') {
-     cphone = ctx.request.query.cphone
+  if (ctx.request.method === 'GET') {
+    cphone = ctx.request.query.cphone
   } else {
-     cphone = ctx.request.body.cphone
+    cphone = ctx.request.body.cphone
   }
   const mob_res = await userModal.findOne({
     where: { cphone }
   })
-  if(mob_res) {
-    return ctx.body = {
-      code: '000003',
-      data: null,
-      msg: '该手机已注册'
-    }
+  if (mob_res) {
+    return ctx.body = ResFormat(resCode.EXIST, null, errMsg[resCode.EXIST])
   } else {
     await next()
   }
@@ -57,24 +50,16 @@ const IsNameUsed = async (ctx, next) => {
   const cur_res = await userModal.findOne({
     where: { cname }
   })
-  if(cur_res) {
-    return ctx.body = {
-      code: '000004',
-      data: null,
-      msg: '用户名重复'
-    }
+  if (cur_res) {
+    return ctx.body = ResFormat(resCode.EXIST, null, errMsg[resCode.EXIST])
   } else {
     await next()
   }
 }
 const IsName = async (ctx, next) => {
   const { cname } = ctx.request.body
-  if(!cname) {
-    return ctx.body = {
-      code: '000001',
-      data: null,
-      msg: '用户名为空'
-    }
+  if (!cname) {
+    return ctx.body = ResFormat(resCode.LACK, null, errMsg[resCode.LACK])
   }
   await next()
 }

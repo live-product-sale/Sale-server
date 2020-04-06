@@ -1,37 +1,21 @@
-const { 
-  getItem, 
-  redisClient 
-} = require('../util/redis/index')
+const { getItem, redisClient } = require('../util/redis/index')
+const { ResFormat } = require('../util/utils')
+const { resCode, errMsg } = require('../util/errorCode')
 
 //登陆验证处理
 const checkLogin = async (ctx, next) => {
-  const { code , cphone, cpassword } = ctx.request.body
-  if(!code) {
-    return ctx.body = {
-      code: '000005',
-      data: null,
-      msg: '验证码为空'
-    }
-  }
-  if( !cphone || !cpassword) {
-    return ctx.body = {
-      code: '000002',
-      data: null,
-      msg: '账号密码不能为空'
-    }
+  const { code, cphone, cpassword } = ctx.request.body
+  if (!code || !cphone || !cpassword) {
+    return ctx.body = ResFormat(resCode.LACK, null, errMsg[resCode.LACK])
   }
   const data = await getItem('captcha')
   // console.log('data', data, 'code', code)
-  if(code === data) {
+  if (code === data) {
     await next()
     redisClient.del('captcha')
   } else {
     redisClient.del('captcha')
-    return ctx.body = {
-      code: '000005',
-      data: null,
-      msg: '验证码不正确'
-    }
+    return ctx.body = ResFormat(resCode.LACK, null, errMsg[resCode.LACK])
   }
 }
 module.exports = checkLogin

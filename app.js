@@ -3,7 +3,7 @@ const app = new Koa()
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
-// const bodyparser = require('koa-bodyparser')
+const bodyparser = require('koa-bodyparser')
 const compress = require('koa-compress')
 const koaJwt = require('koa-jwt')   // 验证token
 const koaBody = require('koa-body')  // 处理文件上传
@@ -17,13 +17,13 @@ const allRoutes = require('./routes/index')
 onerror(app)
 
 // 处理文件上传
-app.use(koaBody({ 
+app.use(koaBody({
   multipart: true,
-  strict:false,       //设为false
+  strict: false,       //设为false
   formidable: {
-      maxFileSize: 1024 * 1024 * 1024
+    maxFileSize: 1024 * 1024 * 1024
   }
- }))
+}))
 
 // 是服务端可以 获取ctx.request.body 中的数据
 // app.use(bodyparser({
@@ -41,8 +41,8 @@ app.use(errorHandle)
 //验证token
 app.use(koaJwt({
   secret: '19970926ly'
-}).unless({ 
-path: [/\/user\/login/, /\/user\/register/, /\/user\/modifyPass/]  // 注册登陆不需要token
+}).unless({
+  path: [/\/user\/login/, /\/user\/register/, /\/user\/modifyPass/]  // 注册登陆不需要token
 }))
 
 app.use(require('koa-static')(__dirname + '/public'))

@@ -1,8 +1,11 @@
+const { ResFormat } = require('../util/utils')
+const { resCode, errMsg } = require('../util/errorCode')
+
 const errorHandle = (ctx, next) => {
   return next().catch(err => {
-    if(err.status === 401) {
+    if (err.status === 401) {
       ctx.status = 401
-      return ctx.sendError('000004', '未授权，访问被拒绝')
+      return ctx.body = ResFormat(resCode.UNLOGIN, null, errMsg[resCode.UNLOGIN])
     } else {
       throw err
     }

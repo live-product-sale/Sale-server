@@ -3,6 +3,7 @@ const {
   generateId,
   ResFormat
 } = require('../../util/utils')
+const { resCode, errMsg } = require('../../util/errorCode')
 const userInfo = require('../../modal/user/userinfo')
 const userModal = require('../../modal/user')
 
@@ -20,16 +21,13 @@ class cusController {
       include: [userInfo],
       attributes: { exclude: ["cpassword"]}
     })
+    const data = {
+      token: createToken({cphone, cpassword }),
+      userinfo: Info
+    },
     if(result) {
-      return ctx.body = {
-          code: "000000",
-          data: {
-            token: createToken({cphone, cpassword }),
-            userinfo: Info
-          },
-          msg: "更新登陆状态"
-      }
-    }
+      return ctx.body = ResFormat(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
+    } 
   }
   // 处理登陆
   static async login(ctx) {
@@ -41,9 +39,9 @@ class cusController {
     })
     if(result !== null) {
       const data = { token: createToken({cphone, cpassword}), userinfo: result }
-      return ctx.body = ResFormat("000000", data, '登陆成功')
+      return ctx.body = ResFormat(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
     } else {
-      return ctx.body = ResFormat("000001", null, '账号或密码错误')
+      return ctx.body = ResFormat(resCode.LACK, null, errMsg[resCode.LACK])
     } 
   }
   // 处理注册
@@ -56,28 +54,28 @@ class cusController {
     )
     await userInfo.create({ uid })
     if(result) {
-      return ctx.body = ResFormat("000000", null, '注册成功')
+      return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     } else {
-      return ctx.body = ResFormat("000001", null, '注册失败')
+      return ctx.body = ResFormat(resCode.EXIST, null, errMsg[resCode.EXIST])
     }
   }
   // 修改密码
   static async modifyPass(ctx) {
     const { cphone, cpassword } = ctx.request.body
     if(!cphone) {
-      return ctx.body = ResFormat("000002", null, '手机号为空')
+      return ctx.body = ResFormat(resCode.LACK, null, errMsg[resCode.LACK])
     }
     const result = await userModal.findOne({
       where: { cphone }
     })
     if(!result) {
-       return ctx.body = ResFormat("000003", null, '该账号不存在')
+       return ctx.body = ResFormat(resCode.EXIST, null, errMsg[resCode.EXIST])
     }
     const res = await userModal.update(
       { cpassword },
       { where: { cphone } })
     if(res) {
-      return ctx.body = ResFormat("000000", null, '修改成功')
+      return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     }
   }
   // 获取用户信息
@@ -88,7 +86,7 @@ class cusController {
       attributes: { exclude: ["cpassword"]},
       include: [userInfo]
     })
-    return ctx.body = ResFormat("000000", result, 'ok')
+    return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
   }
   // 完善用户信息
   static async perfectUserInfo(ctx) {
@@ -103,7 +101,7 @@ class cusController {
         where: {uid}
       })
     }
-    return ctx.body = ResFormat("000000", null, 'ok')
+    return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
   }
 
   static async getUserNameByuid(ctx) {
@@ -112,7 +110,7 @@ class cusController {
       where: { uid },
       attributes: ["name", "avatar"] 
     })
-    return ctx.body = ResFormat("000000", result, 'ok')
+    return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
   }
 
   static async updatePassword(ctx) {
@@ -125,9 +123,9 @@ class cusController {
       await userModal.update({
         cpassword: newPassword
       }, { where: { uid, cphone }})
-      return ctx.body = ResFormat("000000", null, "修改成功")
+      return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     } else {
-      return ctx.body = ResFormat("000001", null, "原密码错误")
+      return ctx.body = ResFormat(resCode.EXIST, null, errMsg[resCode.EXIST])
     }
   }
 }
