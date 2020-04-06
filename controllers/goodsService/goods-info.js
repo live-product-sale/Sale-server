@@ -8,14 +8,14 @@
  */
 const goodsInfoModal = require('../../modal/goods/goodsInfo')
 const goodsModal = require('../../modal/goods/index')
-const { Resformat } = require('../../util/utils')
+const { ResFormat } = require('../../util/utils')
 
 class GoodsInfoService {
   // 添加商品详情
      static async increaseInfo(ctx) {
        const data = ctx.request.body
        const result = await goodsInfoModal.create(data)
-       return ctx.body = Resformat("000000", result, "修改成功")
+       return ctx.body = ResFormat("000000", result, "修改成功")
      }
      // 获取商品详情
      static async getGoodsInfo(ctx) {
@@ -26,7 +26,7 @@ class GoodsInfoService {
        const result = await goodsModal.findOne({
          where: { goods_id}
        })
-       return ctx.body = Resformat("000000", { result, detail }, "ok")
+       return ctx.body = ResFormat("000000", { result, detail }, "ok")
      }
 }
 module.exports = GoodsInfoService

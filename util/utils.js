@@ -53,14 +53,14 @@ const generateId = () => {
 /**
  *  统一响应格式
  *  @param { String } code
- *  @param { any } data
+ *  @param { any } result
  *  @param { String }  msg
  *  @returns { Object } result
  */
-const ResFormat = (code, data, msg) => {
+const ResFormat = (code, result, msg) => {
   return {
     code, 
-    data,
+    data: result,
     msg
   }
 }
