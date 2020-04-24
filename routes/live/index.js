@@ -22,5 +22,4 @@ router.post('/attention', CusServices.attentionLive)
 router.get('/attentionList', CusServices.getAttentionLive)
 // 获取直播间根据sort_id , range_id
 router.get('/sortAndrange', CusServices.getLiveBySort)
-
 module.exports = router

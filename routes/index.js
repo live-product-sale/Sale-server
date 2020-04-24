@@ -1,6 +1,7 @@
 const router = require('koa-router')()
 const userRoute = require('./user')
 const liveRoute = require('./live')
+const buiredRoute = require('./live/buried')
 const shopRoute = require('./shop')
 const goodRoute = require('./goods')
 const cartRoute = require('./cart')
@@ -19,5 +20,6 @@ router.use(orderRoute.routes(), orderRoute.allowedMethods())
 router.use(sortRoute.routes(), sortRoute.allowedMethods())
 router.use(addressRoute.routes(), addressRoute.allowedMethods())
 router.use(searchRoute.routes(), searchRoute.allowedMethods())
+router.use(buiredRoute.routes(), searchRoute.allowedMethods())
 
 module.exports = router
