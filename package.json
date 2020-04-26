@@ -16,6 +16,7 @@
     "debug": "^4.1.1",
     "js-base64": "^2.5.1",
     "js-md5": "^0.7.3",
+    "js-recommender": "^1.0.5",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-body": "^4.1.1",
