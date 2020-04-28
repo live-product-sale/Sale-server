@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-26 16:36:55
+ * @LastEditTime: 2020-04-28 20:59:05
  */
 const Op = require('sequelize').Op
 const liveModal = require('../../modal/live')
@@ -19,20 +19,34 @@ class customerService {
 
   // 按分页查询直播间信息
   static async getLiveList(ctx) {
-    const { offset, limit, live_id } = ctx.request.query
+    const { offset, limit, uid } = ctx.request.query
     try {
       const recoData = await setTable()
-      const liveSet = recoData[live_id] ? recoData[live_id] : []
+      console.log(uid)
+      console.log(recoData)
+      const liveSet = recoData[uid] ? recoData[uid] : []
+      console.log(liveSet)
       const recommendLive = await liveModal.findAll({
         offset: parseInt(offset),
         limit: parseInt(limit),
-        attributes: { exclude: ['live_push', 'live_play'] }
-      }, {
+        attributes: { exclude: ['live_push', 'live_play'] },
         where: {
-          live_id: liveSet
+          live_id: {
+            [Op.or]: liveSet
+          }
         }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, recommendLive, errMsg[resCode.SUCCESS])
+      const otherLive = await liveModal.findAll({
+        offset: parseInt(offset),
+        limit: parseInt(limit) - recommendLive.length,
+        where: {
+          live_id: {
+            [Op.not]: liveSet
+          }
+        }
+      })
+      // console.log(recommendLive.length, otherLive.length)
+      return ctx.body = uniformRes(resCode.SUCCESS, [...recommendLive, ...otherLive], errMsg[resCode.SUCCESS])
     } catch (err) {
       console.error(err)
       return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
@@ -122,11 +136,12 @@ class customerService {
   static async enterLiveWithUser(ctx) {
     const data = ctx.request.body
     try {
-      const buriedObj = await buried.findAll({
-        where: { uid: data.uid, live_id: data.live_id }
+      const buriedObj = await buried.findOne({
+        where: { uid: data.uid, live_id: data.live_id },
+        attributes: ['id']
       })
-      console.log(buriedObj)
-      buriedObj.length > 0 ? await buried.update({
+      // console.log(buriedObj)
+      buriedObj.id  ? await buried.update({
         enter_time: data.enter_time
       }, { where: { id: buriedObj.id } }) : await buried.create(data)
       return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
