@@ -32,18 +32,7 @@ class customerService {
           live_id: liveSet
         }
       })
-      const result = await liveModal.findAll({
-        offset: parseInt(offset),
-        limit: parseInt(limit),
-        attributes: { exclude: ['live_push', 'live_play'] }
-      }, {
-        where: {
-          live_id: {
-            [Op.not]: liveSet
-          }
-        }
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, [...recommendLive, ...result], errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, recommendLive, errMsg[resCode.SUCCESS])
     } catch (err) {
       console.error(err)
       return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
@@ -55,7 +44,9 @@ class customerService {
     try {
       const result = await liveModal.findOne({
         where: { live_id },
-        attributes: { exclude: ['live_push', 'shop_slogan', 'good_price', 'good_avatar', 'status', 'sort_id'] }
+        attributes: { 
+          exclude: ['live_push', 'shop_slogan', 'good_price', 'good_avatar', 'status', 'sort_id'] 
+        }
       })
       return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch (err) {
@@ -132,8 +123,7 @@ class customerService {
     const data = ctx.request.body
     try {
       const buriedObj = await buried.findAll({
-        where: { uid: data.uid, live_id: data.live_id },
-        attributes: ['id']
+        where: { uid: data.uid, live_id: data.live_id }
       })
       console.log(buriedObj)
       buriedObj.length > 0 ? await buried.update({

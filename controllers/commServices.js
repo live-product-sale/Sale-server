@@ -10,8 +10,8 @@ class Common {
     const code = parseInt(Math.random() * 9000 + 1000)
     setItem('captcha', code)
     const pic = new captchapng(80, 30, code)
-    pic.color(237, 28, 46, 90)                              //背景颜色
-    pic.color(80, 80, 80, 255);                      //文字颜色
+    pic.color(229, 229, 229)                              //背景颜色
+    pic.color(255, 255, 255);                      //文字颜色
     const img = pic.getBase64()
     const imgbase64 = new Buffer.from(img, 'base64')
     ctx.set('Content-Type', 'image/png')
