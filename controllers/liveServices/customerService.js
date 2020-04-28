@@ -10,7 +10,7 @@ const Op = require('sequelize').Op
 const liveModal = require('../../modal/live')
 const followLive = require('../../modal/live/followLive')
 const buried = require('../../modal/live/buried')
-const { ResFormat } = require('../../util/utils')
+const { uniformRes } = require('../../util/utils')
 const { errMsg, resCode } = require('../../util/errorCode')
 const setTable = require('../../util/recommend/index')
 
@@ -43,10 +43,10 @@ class customerService {
           }
         }
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, [...recommendLive, ...result], errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, [...recommendLive, ...result], errMsg[resCode.SUCCESS])
     } catch (err) {
       console.error(err)
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 根据Live_id获取直播间拉流信息
@@ -57,10 +57,10 @@ class customerService {
         where: { live_id },
         attributes: { exclude: ['live_push', 'shop_slogan', 'good_price', 'good_avatar', 'status', 'sort_id'] }
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch (err) {
       console.error(err)
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 关注直播间 或取消关注
@@ -82,10 +82,10 @@ class customerService {
           }
         })
       }
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch (err) {
       console.error(err)
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 获取关注的直播间
@@ -98,7 +98,7 @@ class customerService {
       })
       let id = live_id.map(item => { return item.live_id })
       if (live_id.length === 0) {
-        return ctx.body = ResFormat(resCode.SUCCESS, [], errMsg[resCode.EMPTY])
+        return ctx.body = uniformRes(resCode.SUCCESS, [], errMsg[resCode.EMPTY])
       }
       const result = await liveModal.findAll({
         where: {
@@ -107,10 +107,10 @@ class customerService {
           }
         }
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch (err) {
       console.error(err)
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 按照分类ID 获取直播间
@@ -121,10 +121,10 @@ class customerService {
         where: { ...data },
         attributes: { exclude: ["live_push"] }
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch (err) {
       console.error(err)
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 进入直播间记录时间戳
@@ -139,10 +139,10 @@ class customerService {
       buriedObj.length > 0 ? await buried.update({
         enter_time: data.enter_time
       }, { where: { id: buriedObj.id } }) : await buried.create(data)
-      return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     } catch (err) {
       console.log(err)
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 离开直播间记录时间戳
@@ -157,10 +157,10 @@ class customerService {
         out_time: data.out_time,
         diff_time: parseInt(data.out_time) - parseInt(buriedObj.enter_time)
       }, { where: { uid: data.uid, live_id: data.live_id } })
-      return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     } catch (err) {
       console.log(err)
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
 }

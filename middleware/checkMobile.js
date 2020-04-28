@@ -1,5 +1,5 @@
 const userModal = require('../modal/user')
-const { ResFormat } = require('../util/utils')
+const { uniformRes } = require('../util/utils')
 const { resCode, errMsg } = require('../util/errorCode')
 /**
  * 手机号是为空
@@ -15,7 +15,7 @@ const IsMobile = async (ctx, next) => {
   }
   console.log(_cphone)
   if (_cphone === '') {
-    return ctx.body = ResFormat(resCode.LACK, null, errMsg[resCode.LACK])
+    return ctx.body = uniformRes(resCode.LACK, null, errMsg[resCode.LACK])
   }
   await next()
 }
@@ -35,7 +35,7 @@ const IsMobileRegisted = async (ctx, next) => {
     where: { cphone }
   })
   if (mob_res) {
-    return ctx.body = ResFormat(resCode.EXIST, null, errMsg[resCode.EXIST])
+    return ctx.body = uniformRes(resCode.EXIST, null, errMsg[resCode.EXIST])
   } else {
     await next()
   }
@@ -51,7 +51,7 @@ const IsNameUsed = async (ctx, next) => {
     where: { cname }
   })
   if (cur_res) {
-    return ctx.body = ResFormat(resCode.EXIST, null, errMsg[resCode.EXIST])
+    return ctx.body = uniformRes(resCode.EXIST, null, errMsg[resCode.EXIST])
   } else {
     await next()
   }
@@ -59,7 +59,7 @@ const IsNameUsed = async (ctx, next) => {
 const IsName = async (ctx, next) => {
   const { cname } = ctx.request.body
   if (!cname) {
-    return ctx.body = ResFormat(resCode.LACK, null, errMsg[resCode.LACK])
+    return ctx.body = uniformRes(resCode.LACK, null, errMsg[resCode.LACK])
   }
   await next()
 }

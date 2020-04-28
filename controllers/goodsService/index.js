@@ -8,7 +8,7 @@
  */
 const goodsModal = require('../../modal/goods')
 const sortModal = require('../../modal/rangesort')
-const { ResFormat } = require('../../util/utils')
+const { uniformRes } = require('../../util/utils')
 const { errMsg, resCode } = require('../../util/errorCode')
 
 class goodService {
@@ -22,9 +22,9 @@ class goodService {
       const result = await goodsModal.findAll({
         where: { shop_id }
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch (err) {
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   /**
@@ -40,9 +40,9 @@ class goodService {
         goods_id,
         ...data
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch (err) {
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   /**
@@ -55,9 +55,9 @@ class goodService {
       const result = await goodsModal.findOne({
         where: { goods_id }
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch (err) {
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
 }

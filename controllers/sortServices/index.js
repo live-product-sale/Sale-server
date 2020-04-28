@@ -4,11 +4,11 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-12 20:29:12
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-06 22:05:40
+ * @LastEditTime: 2020-04-28 18:52:40
  */
 const rangeModal = require('../../modal/rangesort')
 const sortModal = require('../../modal/rangesort/sort')
-const { ResFormat } = require('../../util/utils')
+const { uniformRes } = require('../../util/utils')
 const { resCode, errMsg } = require('../../util/errorCode')
 
 class sortService {
@@ -25,31 +25,46 @@ class sortService {
       { range_id: 7, name: "其他" }
     ]
     await rangeModal.bulkCreate(data)
-    return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+    return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
   }
   // 根据range_id 获取具体产品类型
   static async getSortByRange(ctx) {
     const { range_id } = ctx.request.query
-    const result = await sortModal.findAll({
-      where: { range_id }
-    })
-    result.unshift({ name: "全部" })
-    return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    try {
+      const result = await sortModal.findAll({
+        where: { range_id }
+      })
+      result.unshift({ name: "全部" })
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    } catch (err) {
+      console.log(err)
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+    }
   }
   // 获取直播间的类型范围
   static async getAllRange(ctx) {
-    const result = await rangeModal.findAll(
-      { attributes: ["name"] }
-    )
-    return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    try {
+      const result = await rangeModal.findAll(
+        { attributes: ["name"] }
+      )
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    } catch (err) {
+      console.log(err)
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+    }
   }
   // 根据range_id 获取sort
   static async getSortByRangeId(ctx) {
     const { range_id } = ctx.request.query
-    const result = await sortModal.findAll({
-      where: { range_id }
-    })
-    return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    try {
+      const result = await sortModal.findAll({
+        where: { range_id }
+      })
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    } catch (err) {
+      console.log(err)
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+    }
   }
 }
 module.exports = sortService

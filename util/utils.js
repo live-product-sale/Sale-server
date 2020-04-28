@@ -1,5 +1,4 @@
 const md5 = require('js-md5')
-const { Base64 } = require('js-base64')
 const jwt = require('jsonwebtoken')  // 生成token
 const secret = '19970926ly'          // 生成token的密钥
 
@@ -7,7 +6,7 @@ const secret = '19970926ly'          // 生成token的密钥
  *  获取推流地址
  *  如果不传递 key 和 过期时间， 将返回不含防盗链的 url
  *  @param streamName 用来区别不同推流地址的唯一流名称
- *  @return String url 推流地址
+ *  @return {String} url 推流地址
  */
  const getPushUrl = ( live_id )=> {
    const stream = live_id
@@ -57,7 +56,7 @@ const generateId = () => {
  *  @param { String }  msg
  *  @returns { Object } result
  */
-const ResFormat = (code, result, msg) => {
+const uniformRes = (code, result, msg) => {
   return {
     code, 
     data: result,
@@ -69,5 +68,5 @@ module.exports = {
   getPlayUrl,
   createToken,
   generateId,
-  ResFormat
+  uniformRes
 }

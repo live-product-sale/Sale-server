@@ -4,20 +4,24 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:11:59
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-24 19:59:40
+ * @LastEditTime: 2020-04-28 18:14:31
  */
 const addressModal = require('../../modal/address')
-const { ResFormat } = require('../../util/utils')
+const { uniformRes } = require('../../util/utils')
 const { errMsg, resCode } = require('../../util/errorCode')
 
 class AddressServie {
   // 获取用户的收件地址
   static async getAddressData(ctx) {
     const { uid } = ctx.request.query
-    const data = await addressModal.findAll({
-      where: { uid }
-    })
-    return ctx.body = ResFormat(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
+    try {
+      const data = await addressModal.findAll({
+        where: { uid }
+      })
+      return ctx.body = uniformRes(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
+    } catch(err) {
+      return ctx.body = uniformRes(resCode.ERROR, data, errMsg[resCode.ERROR])
+    }
   }
   //更新或创建地址
   static async createOrupdate(ctx) {
@@ -43,9 +47,9 @@ class AddressServie {
       } else {
         await addressModal.create({ ...data, action: undefined })
       }
-      return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     } catch (err) {
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 获取默认地址
@@ -58,9 +62,9 @@ class AddressServie {
           isDefault: true
         }
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch(err) {
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 修改地址状态
@@ -83,9 +87,9 @@ class AddressServie {
           { isDefault },
           { where: { uid, id } })
       }
-      return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     } catch(err) {
-      return ctx.body = ResFormat(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
     }
   }
   // 删除地址
@@ -95,9 +99,9 @@ class AddressServie {
       const result = await addressModal.destroy({
         where: { id, uid }
       })
-      return ctx.body = ResFormat(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
     } catch(err) {
-      return ctx.body = ResFormat(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
     }
   }
 }
