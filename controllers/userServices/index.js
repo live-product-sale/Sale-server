@@ -38,15 +38,16 @@ class cusController {
     const { cphone, cpassword } = ctx.request.body
     try {
       const result = await userModal.findOne({
-        where: { cphone, cpassword },
-        include: [userInfo],
-        attributes: { exclude: ["cpassword"] }
+        where: { cphone },
+        include: [userInfo]
+        // attributes: ['cpassword']
       })
-      if (result !== null) {
+      // console.log(result)
+      if (result.cpassword === cpassword) {
         const data = { token: createToken({ cphone, cpassword }), userinfo: result }
         return ctx.body = uniformRes(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
       } else {
-        return ctx.body = uniformRes(resCode.LACK, null, errMsg[resCode.LACK])
+        return ctx.body = uniformRes(resCode.USER_PASSWORD_ERR, null, errMsg[resCode.USER_PASSWORD_ERR])
       }
     } catch (err) {
       console.log(err)
