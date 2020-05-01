@@ -1,7 +1,7 @@
 const captchapng = require('captchapng')
 const { setItem } = require('../util/redis/index')
 const { uniformRes } = require('../util/utils')
-const { resCode, errMsg } = require('../util/errorCode')
+const { resCode } = require('../util/errorCode')
 const sendPhone = require('../util/tool/phone')
 
 class Common {
@@ -25,9 +25,9 @@ class Common {
     setItem('mobileCode', code)
     const result = await sendPhone(code, cphone)
     if (JSON.parse(result).return_code == "00000") {
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
     } else {
-      return ctx.body = uniformRes(resCode.ERROR, JSON.parse(result).return_code, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, JSON.parse(result).return_code)
     }
   }
 

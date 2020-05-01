@@ -6,7 +6,7 @@ const {
   getPlayUrl,
   generateId
 } = require('../../util/utils')
-const { resCode, errMsg } = require('../../util/errorCode')
+const { resCode } = require('../../util/errorCode')
 const { uniformRes } = require('../../util/utils')
 
 /**
@@ -40,7 +40,7 @@ class busService {
     const liveObj = await adapterArg(data)
     const result = await liveModal.create(liveObj)
     const content = { ...result.dataValues, live_play: undefined }
-    return ctx.body = uniformRes(resCode.SUCCESS, content, errMsg[resCode.SUCCESS])
+    return ctx.body = uniformRes(resCode.SUCCESS, content)
   }
   // 根据商店Id获取直播间
   static async getLiveByShopId(ctx) {
@@ -49,7 +49,7 @@ class busService {
       where: { shop_id },
       attributes: { exclude: ['live_play'] }
     })
-    return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
   // 根据ID获取信息推流地址
   static async getLiveById(ctx) {
@@ -58,7 +58,7 @@ class busService {
       where: { live_id }
     })
     const data = { live_push: result.live_push }
-    return ctx.body = uniformRes(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
+    return ctx.body = uniformRes(resCode.SUCCESS, data)
   }
   // 开始直播
   static async startLive(ctx) {
@@ -70,7 +70,7 @@ class busService {
       {
         where: { live_id }
       })
-    return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
   // 结束直播
   static async endLive(ctx) {
@@ -78,7 +78,7 @@ class busService {
     const result = await liveModal.update({
       status
     }, { where: { live_id } })
-    return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+    return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
 }
 module.exports = busService

@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-04-06 17:36:39
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-30 20:37:55
+ * @LastEditTime: 2020-05-01 09:52:06
  */
 //错误码
 const resCode = {
@@ -15,7 +15,8 @@ const resCode = {
   UNLOGIN:                           "000004",
   EXIST:                             "000005",
   PARAMETER_ERR:                     "000006",
-  USER_PASSWORD_ERR:                 "000007"
+  USER_PASSWORD_ERR:                 "000007",
+  USER_CAPTCHA_ERR:                  "000008"
 }
 // 错误信息
 const errMsg = {
@@ -26,7 +27,8 @@ const errMsg = {
   [resCode.UNLOGIN]:               '用户未登陆',
   [resCode.EXIST]:                 '数据已存在',
   [resCode.PARAMETER_ERR]:         '参数错误',
-  [resCode.USER_PASSWORD_ERR]:     '密码错误'
+  [resCode.USER_PASSWORD_ERR]:     '密码错误',
+  [resCode.USER_CAPTCHA_ERR]:      '验证码错误'
 }
 module.exports = {
   errMsg,

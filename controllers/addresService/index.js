@@ -4,11 +4,11 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:11:59
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-28 18:14:31
+ * @LastEditTime: 2020-05-01 10:09:18
  */
 const addressModal = require('../../modal/address')
 const { uniformRes } = require('../../util/utils')
-const { errMsg, resCode } = require('../../util/errorCode')
+const { resCode } = require('../../util/errorCode')
 
 class AddressServie {
   // 获取用户的收件地址
@@ -18,9 +18,9 @@ class AddressServie {
       const data = await addressModal.findAll({
         where: { uid }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
-    } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, data, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.SUCCESS, data)
+    } catch (err) {
+      return ctx.body = uniformRes(resCode.ERROR, data)
     }
   }
   //更新或创建地址
@@ -47,9 +47,9 @@ class AddressServie {
       } else {
         await addressModal.create({ ...data, action: undefined })
       }
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
     } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 获取默认地址
@@ -62,9 +62,9 @@ class AddressServie {
           isDefault: true
         }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
-    } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.SUCCESS, result)
+    } catch (err) {
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 修改地址状态
@@ -87,9 +87,9 @@ class AddressServie {
           { isDefault },
           { where: { uid, id } })
       }
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
-    } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
+    } catch (err) {
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 删除地址
@@ -99,9 +99,9 @@ class AddressServie {
       const result = await addressModal.destroy({
         where: { id, uid }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
-    } catch(err) {
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result)
+    } catch (err) {
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
     }
   }
 }

@@ -3,7 +3,7 @@ const {
   generateId,
   uniformRes
 } = require('../../util/utils')
-const { resCode, errMsg } = require('../../util/errorCode')
+const { resCode } = require('../../util/errorCode')
 const userInfo = require('../../modal/user/userinfo')
 const userModal = require('../../modal/user')
 
@@ -26,11 +26,11 @@ class cusController {
         token: createToken({ cphone, cpassword }),
         userinfo: Info
       }
-      result ? ctx.body = uniformRes(resCode.SUCCESS, data, errMsg[resCode.SUCCESS]) : ''
+      result ? ctx.body = uniformRes(resCode.SUCCESS, data) : ''
       return;
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 处理登陆
@@ -45,14 +45,14 @@ class cusController {
       // console.log(result)
       if (result.cpassword === cpassword) {
         const data = { token: createToken({ cphone, cpassword }), userinfo: result }
-        return ctx.body = uniformRes(resCode.SUCCESS, data, errMsg[resCode.SUCCESS])
+        return ctx.body = uniformRes(resCode.SUCCESS, data)
       } else {
-        return ctx.body = uniformRes(resCode.USER_PASSWORD_ERR, null, errMsg[resCode.USER_PASSWORD_ERR])
+        return ctx.body = uniformRes(resCode.USER_PASSWORD_ERR, null)
       }
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
-    } 
+      return ctx.body = uniformRes(resCode.ERROR, null)
+    }
   }
   // 处理注册
   static async register(ctx) {
@@ -67,37 +67,37 @@ class cusController {
       )
       await userInfo.create({ uid })
       if (!user) {
-        return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+        return ctx.body = uniformRes(resCode.SUCCESS, null)
       } else {
-        return ctx.body = uniformRes(resCode.EXIST, null, errMsg[resCode.EXIST])
+        return ctx.body = uniformRes(resCode.EXIST, null)
       }
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 修改密码
   static async modifyPass(ctx) {
     const { cphone, cpassword } = ctx.request.body
     if (!cphone) {
-      return ctx.body = uniformRes(resCode.LACK, null, errMsg[resCode.LACK])
+      return ctx.body = uniformRes(resCode.LACK, null)
     }
     try {
       const result = await userModal.findOne({
         where: { cphone }
       })
       if (!result) {
-        return ctx.body = uniformRes(resCode.EXIST, null, errMsg[resCode.EXIST])
+        return ctx.body = uniformRes(resCode.EXIST, null)
       }
       const res = await userModal.update(
         { cpassword },
         { where: { cphone } })
       if (res) {
-        return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+        return ctx.body = uniformRes(resCode.SUCCESS, null)
       }
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 获取用户信息
@@ -109,11 +109,11 @@ class cusController {
         attributes: { exclude: ["cpassword"] },
         include: [userInfo]
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result)
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
-    } 
+      return ctx.body = uniformRes(resCode.ERROR, null)
+    }
   }
   // 完善用户信息
   static async perfectUserInfo(ctx) {
@@ -129,10 +129,10 @@ class cusController {
           where: { uid }
         })
       }
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
 
@@ -143,9 +143,9 @@ class cusController {
         where: { uid },
         attributes: ["name", "avatar"]
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result)
     } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 更新密码
@@ -160,13 +160,13 @@ class cusController {
         await userModal.update({
           cpassword: newPassword
         }, { where: { uid, cphone } })
-        return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+        return ctx.body = uniformRes(resCode.SUCCESS, null)
       } else {
-        return ctx.body = uniformRes(resCode.EXIST, null, errMsg[resCode.EXIST])
+        return ctx.body = uniformRes(resCode.EXIST, null)
       }
     } catch (err) {
-      console.log(err) 
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      console.log(err)
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
 }

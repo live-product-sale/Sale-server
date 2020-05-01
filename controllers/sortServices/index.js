@@ -4,12 +4,12 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-12 20:29:12
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-28 18:52:40
+ * @LastEditTime: 2020-05-01 10:06:30
  */
 const rangeModal = require('../../modal/rangesort')
 const sortModal = require('../../modal/rangesort/sort')
 const { uniformRes } = require('../../util/utils')
-const { resCode, errMsg } = require('../../util/errorCode')
+const { resCode } = require('../../util/errorCode')
 
 class sortService {
   // 添加直播类型
@@ -25,7 +25,7 @@ class sortService {
       { range_id: 7, name: "其他" }
     ]
     await rangeModal.bulkCreate(data)
-    return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+    return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
   // 根据range_id 获取具体产品类型
   static async getSortByRange(ctx) {
@@ -35,10 +35,10 @@ class sortService {
         where: { range_id }
       })
       result.unshift({ name: "全部" })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
   // 获取直播间的类型范围
@@ -47,10 +47,10 @@ class sortService {
       const result = await rangeModal.findAll(
         { attributes: ["name"] }
       )
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
   // 根据range_id 获取sort
@@ -60,10 +60,10 @@ class sortService {
       const result = await sortModal.findAll({
         where: { range_id }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
 }

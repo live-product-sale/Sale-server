@@ -11,7 +11,7 @@ const sortModal = require('../../modal/rangesort/sort')
 const liveModal = require('../../modal/live/index')
 const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
-const { errMsg, resCode } = require('../../util/errorCode')
+const {    resCode } = require('../../util/errorCode')
 
 class searchService {
 
@@ -37,9 +37,9 @@ class searchService {
         }
       })
       // console.log(result)
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }  
   }
 }

@@ -4,14 +4,14 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-28 20:59:05
+ * @LastEditTime: 2020-05-01 15:24:41
  */
 const Op = require('sequelize').Op
 const liveModal = require('../../modal/live')
-const followLive = require('../../modal/live/followLive')
+const followLiveModal = require('../../modal/live/followLive')
 const buried = require('../../modal/live/buried')
 const { uniformRes } = require('../../util/utils')
-const { errMsg, resCode } = require('../../util/errorCode')
+const { resCode } = require('../../util/errorCode')
 const setTable = require('../../util/recommend/index')
 
 class customerService {
@@ -46,64 +46,82 @@ class customerService {
         }
       })
       // console.log(recommendLive.length, otherLive.length)
-      return ctx.body = uniformRes(resCode.SUCCESS, [...recommendLive, ...otherLive], errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, [...recommendLive, ...otherLive])
     } catch (err) {
       console.error(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 根据Live_id获取直播间拉流信息
   static async getLivePlay(ctx) {
-    const { live_id } = ctx.request.query
+    const { live_id, uid } = ctx.request.query
+    console.log(uid, live_id)
     try {
       const result = await liveModal.findOne({
         where: { live_id },
-        attributes: { 
-          exclude: ['live_push', 'shop_slogan', 'good_price', 'good_avatar', 'status', 'sort_id'] 
+        attributes: {
+          exclude: ['live_push', 'shop_slogan', 'good_price', 'good_avatar', 'status', 'sort_id']
         }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      const resultOriented = await followLiveModal.findOne({
+        where: { uid, live_id }
+      })
+      result.dataValues['isfollow'] = resultOriented ? true : false
+      // console.log(resultOriented, result)
+      // resultOriented === null ? isfollow = false : isfollow = true
+      return ctx.body = uniformRes(resCode.SUCCESS, result)
     } catch (err) {
       console.error(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
-  // 关注直播间 或取消关注
+  // 关注直播间 或 取消关注
   static async attentionLive(ctx) {
-    const { live_id, isfollow, uid } = ctx.request.body
+    const { live_id, uid, isfollow } = ctx.request.body
+    console.log(isfollow)
     try {
-      const result = await liveModal.update({
-        isfollow
-      }, {
-        where: { live_id }
+      const attentResult = await liveModal.findOne({
+        where: { live_id },
+        attributes: ['att_amount']
       })
+      const att_amount = parseInt(attentResult.att_amount)
       if (isfollow) {
-        await followLive.create({ uid, live_id })
+        await followLiveModal.create({ uid, live_id })
+        await liveModal.update({
+          att_amount: att_amount + 1
+        }, {
+          where: { live_id }
+        })
       } else {
-        await followLive.destroy({
+        await liveModal.update({
+          att_amount: att_amount === 0 ? att_amount : att_amount - 1
+        }, {
+          where: { live_id }
+        })
+        await followLiveModal.destroy({
           where: {
             uid,
             live_id
           }
         })
       }
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
     } catch (err) {
       console.error(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 获取关注的直播间
   static async getAttentionLive(ctx) {
     const { uid } = ctx.request.query
     try {
-      const live_id = await followLive.findAll({
+      const live_id = await followLiveModal.findAll({
         where: { uid },
-        attributes: { exclude: ["uid", "id"] }
+        attributes: { exclude: ["uid", ] }
       })
       let id = live_id.map(item => { return item.live_id })
       if (live_id.length === 0) {
-        return ctx.body = uniformRes(resCode.SUCCESS, [], errMsg[resCode.EMPTY])
+        return ctx.body = uniformRes(resCode.SUCCESS, [])
       }
       const result = await liveModal.findAll({
         where: {
@@ -112,10 +130,10 @@ class customerService {
           }
         }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result)
     } catch (err) {
       console.error(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 按照分类ID 获取直播间
@@ -126,10 +144,39 @@ class customerService {
         where: { ...data },
         attributes: { exclude: ["live_push"] }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result)
     } catch (err) {
       console.error(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
+    }
+  }
+  /**
+   * 
+   * @param {*} ctx 
+   */
+  static async updateViewMount(ctx) {
+    const { type, live_id } = ctx.request.body
+    console.log(type, live_id)
+    try {
+      const result = await liveModal.findOne({
+        where: { live_id },
+        attributes: ["view_amount"]
+      })
+      const view_amount = parseInt(result.view_amount)
+      type === 'enter' ? await liveModal.update({
+        view_amount: view_amount + 1
+      }, {
+        where: { live_id }
+      }) : ""
+      type === 'out' && view_amount > 0 ? await liveModal.update({
+        view_amount: view_amount - 1
+      }, {
+        where: { live_id }
+      }) : ""
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
+    } catch (err) {
+      console.log(err)
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 进入直播间记录时间戳
@@ -140,14 +187,13 @@ class customerService {
         where: { uid: data.uid, live_id: data.live_id },
         attributes: ['id']
       })
-      // console.log(buriedObj)
-      buriedObj.id  ? await buried.update({
+      buriedObj.id ? await buried.update({
         enter_time: data.enter_time
       }, { where: { id: buriedObj.id } }) : await buried.create(data)
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
   // 离开直播间记录时间戳
@@ -162,10 +208,10 @@ class customerService {
         out_time: data.out_time,
         diff_time: parseInt(data.out_time) - parseInt(buriedObj.enter_time)
       }, { where: { uid: data.uid, live_id: data.live_id } })
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null)
     }
   }
 }

@@ -4,18 +4,15 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:55:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-26 19:50:05
+ * @LastEditTime: 2020-05-01 15:00:38
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const orderDetail = require('./order-detail')
 const order = mysql.define('order', {
-  id: {
-     type:sequelize.BIGINT,
-     primaryKey: true
-  },
   order_id: {
-    type: sequelize.STRING
+    type: sequelize.STRING,
+    primaryKey: true
   }, 
   order_state: {
     type: sequelize.STRING,

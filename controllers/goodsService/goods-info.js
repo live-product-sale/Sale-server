@@ -9,7 +9,7 @@
 const goodsInfoModal = require('../../modal/goods/goodsInfo')
 const goodsModal = require('../../modal/goods/index')
 const { uniformRes } = require('../../util/utils')
-const { errMsg, resCode } = require('../../util/errorCode')
+const {    resCode } = require('../../util/errorCode')
 
 class GoodsInfoService {
   /**
@@ -20,9 +20,9 @@ class GoodsInfoService {
     const data = ctx.request.body
     try {
       const result = await goodsInfoModal.create(data)
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
   /**
@@ -38,9 +38,9 @@ class GoodsInfoService {
       const result = await goodsModal.findOne({
         where: { goods_id }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, { result, detail }, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, { result, detail } )
     } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
 }

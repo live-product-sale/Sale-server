@@ -8,31 +8,31 @@ const secret = '19970926ly'          // 生成token的密钥
  *  @param streamName 用来区别不同推流地址的唯一流名称
  *  @return {String} url 推流地址
  */
- const getPushUrl = ( live_id )=> {
-   const stream = live_id
-   const time = parseInt((Date.now() + 12 * 60 *60 * 1000) / 1000)
-   const domain = '67845.livepush.myqcloud.com'   // 推流域名
-   const Key = '5850747f8aab996c8214d21336f58179'  // API key
-   const txTime = time.toString(16).toUpperCase()
-   const txSecret = md5(Key + stream + txTime )
-   const ext_str = `?txSecret=${ txSecret }&txTime=${ txTime }`
-   return `rtmp://${ domain }/live/${ stream }${ ext_str }`
- }
- /**
-  * 获取拉流地址
-  * @param streamName {string}
-  * @return url { string }
-  */
- const getPlayUrl = (live_id) => {
-   const domain = 'zhangly.xyz'
-   const time = parseInt((Date.now() + 12 * 60 * 60 * 1000) / 1000)
-   const stream = live_id
-   const Key = '5850747f8aab996c8214d21336f58179'
-   const txTime = time.toString(16).toUpperCase()
-   const txSecret = md5(Key + stream + txTime )
-   const ext_str = `?txSecret=${ txSecret }&txTime=${ txTime }`
-   return  `rtmp://${ domain }/live/${ stream }${ ext_str }`
- }
+const getPushUrl = (live_id) => {
+  const stream = live_id
+  const time = parseInt((Date.now() + 12 * 60 * 60 * 1000) / 1000)
+  const domain = '67845.livepush.myqcloud.com'   // 推流域名
+  const Key = '5850747f8aab996c8214d21336f58179'  // API key
+  const txTime = time.toString(16).toUpperCase()
+  const txSecret = md5(Key + stream + txTime)
+  const ext_str = `?txSecret=${txSecret}&txTime=${txTime}`
+  return `rtmp://${domain}/live/${stream}${ext_str}`
+}
+/**
+ * 获取拉流地址
+ * @param streamName {string}
+ * @return url { string }
+ */
+const getPlayUrl = (live_id) => {
+  const domain = 'zhangly.xyz'
+  const time = parseInt((Date.now() + 12 * 60 * 60 * 1000) / 1000)
+  const stream = live_id
+  const Key = '5850747f8aab996c8214d21336f58179'
+  const txTime = time.toString(16).toUpperCase()
+  const txSecret = md5(Key + stream + txTime)
+  const ext_str = `?txSecret=${txSecret}&txTime=${txTime}`
+  return `rtmp://${domain}/live/${stream}${ext_str}`
+}
 /**
  * 用于生成token
  * @param { any } data 
@@ -40,7 +40,7 @@ const secret = '19970926ly'          // 生成token的密钥
  * @returns { String } token
  */
 const createToken = (data) => {
-  const token = jwt.sign(data, secret, {expiresIn:'24h'} )
+  const token = jwt.sign(data, secret, { expiresIn: '24h' })
   return token
 }
 /**
@@ -56,11 +56,12 @@ const generateId = () => {
  *  @param { String }  msg
  *  @returns { Object } result
  */
-const uniformRes = (code, result, msg) => {
+const { errMsg } = require('./errorCode')
+const uniformRes = (code, result) => {
   return {
-    code, 
+    code,
     data: result,
-    msg
+    msg: code === '000000' && result == null ? '数据为空' : errMsg[code]
   }
 }
 module.exports = {

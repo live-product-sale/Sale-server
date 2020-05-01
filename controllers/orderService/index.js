@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:02:35
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-28 18:35:52
+ * @LastEditTime: 2020-05-01 14:59:15
  */
 const orderModal = require('../../modal/order')
 const orderDetail = require('../../modal/order/order-detail')
@@ -13,7 +13,7 @@ const cartMoal = require('../../modal/cart')
 const shopMoal = require('../../modal/shop')
 const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
-const { errMsg, resCode } = require('../../util/errorCode')
+const { resCode } = require('../../util/errorCode')
 
 class orderService {
   // 订单数据模版
@@ -43,24 +43,23 @@ class orderService {
           }
         })
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, shopInfo, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, shopInfo )
     } catch (err) {
       console.error(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     } 
   }
 
   // 创建订单
   static async createOrder(ctx) {
     const { shopInfo, goodsInfo, uid, address_id } = ctx.request.body
-    //  console.log(shopInfo, goodsInfo, uid, address_id)
+     console.log(shopInfo, goodsInfo, uid, address_id)
     let total_price = 0
     const order_id = Date.now()
     shopInfo.forEach(item => {
-      item["order_id"] = order_id,
+        item["order_id"] = order_id,
         item["uid"] = uid,
         item["address_id"] = address_id
-      item.id = undefined
     })
     goodsInfo.forEach(item => {
       item["order_id"] = order_id
@@ -70,10 +69,10 @@ class orderService {
       await orderModal.bulkCreate(shopInfo)
       await orderDetail.bulkCreate(goodsInfo)
       await payOrder.create({ order_id, uid, total_price })
-      return ctx.body = uniformRes(resCode.SUCCESS, { order_id }, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, { order_id } )
     } catch(err) {
-      console.err(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.SUCCESS])
+      console.error(err)
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
 
@@ -88,10 +87,10 @@ class orderService {
           isSuccess: false
         }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch(err) {
       console.error(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
     
   }
@@ -109,10 +108,10 @@ class orderService {
       }, {
         where: { uid, order_id }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
 
@@ -140,10 +139,10 @@ class orderService {
           }
         }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, { orderList, orderGoods }, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, { orderList, orderGoods } )
     } catch(err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }  
   }
 
@@ -160,10 +159,10 @@ class orderService {
       await payOrder.destroy({
         where: { uid, order_id }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null )
     } catch(err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     } 
   }
 
@@ -180,9 +179,9 @@ class orderService {
       await payOrder.destroy({
         where: { order_id, uid }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null )
     } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }  
   }
 
@@ -193,10 +192,10 @@ class orderService {
       await orderModal.update({
         order_state: 3
       }, { where: { order_id, uid, shop_id } })
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
 
@@ -208,10 +207,10 @@ class orderService {
       await orderModal.update({
         order_state: 4
       }, { where: { order_id, uid } })
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }   
   }
 
@@ -222,10 +221,10 @@ class orderService {
       const result = await orderModal.findAll({
         where: { shop_id }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch(err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
 }

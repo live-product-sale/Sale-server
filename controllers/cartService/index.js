@@ -9,7 +9,7 @@
 const cartModal = require('../../modal/cart')
 // const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
-const { errMsg, resCode } = require('../../util/errorCode')
+const {    resCode } = require('../../util/errorCode')
 
 class cartService {
   /**
@@ -22,9 +22,9 @@ class cartService {
       const result = await cartModal.findAll({
         where: { uid }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
   /**
@@ -58,9 +58,9 @@ class cartService {
         data["cart_id"] = cart_id
         await cartModal.create(data)
       }
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null )
     } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
   /**
@@ -76,9 +76,9 @@ class cartService {
           cart_id
         }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null )
     } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
   /**
@@ -91,9 +91,9 @@ class cartService {
       const result = await cartModal.update({
         goods_checked: status
       }, { where: { cart_id } })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
   /**
@@ -106,9 +106,9 @@ class cartService {
       await cartModal.update({
         goods_num
       }, { where: { cart_id } })
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null )
     } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     } 
   }
   /**
@@ -121,9 +121,9 @@ class cartService {
       await cartModal.destroy({
         where: { uid }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, null, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, null )
     } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }  
   }
 }

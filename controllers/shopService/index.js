@@ -4,12 +4,12 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 11:24:19
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-28 18:43:10
+ * @LastEditTime: 2020-05-01 10:06:40
  */
 const { generateId } = require('../../util/utils')
 const shopModal = require('../../modal/shop')
 const { uniformRes } = require('../../util/utils')
-const { resCode, errMsg } = require('../../util/errorCode')
+const { resCode } = require('../../util/errorCode')
 
 class shopService {
   // 用户创建商店
@@ -23,10 +23,10 @@ class shopService {
         shop_name,
         shop_avatar
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
   }
   // 根据uid获取商店
@@ -36,10 +36,10 @@ class shopService {
       const result = await shopModal.findAll({
         where: { uid }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }
     
   }
@@ -50,10 +50,10 @@ class shopService {
       const result = await shopModal.findOne({
         where: { shop_id }
       })
-      return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
+      return ctx.body = uniformRes(resCode.SUCCESS, result )
     } catch (err) {
       console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null, errMsg[resCode.ERROR])
+      return ctx.body = uniformRes(resCode.ERROR, null )
     }  
   }
 }

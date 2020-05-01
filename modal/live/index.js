@@ -15,10 +15,7 @@ const live = mysql.define('live', {
   live_push: {
     type: Sequelize.STRING
   },
-  isfollow: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
-  },
+ 
   status: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
@@ -46,7 +43,15 @@ const live = mysql.define('live', {
   },
   sort_id: {
     type: Sequelize.STRING
-  }
+  },
+  att_amount: {
+    type: Sequelize.STRING,
+    defaultValue: '0'
+  },
+  view_amount: {
+    type: Sequelize.STRING,
+    defaultValue: '0'
+  },
 }, {
   freezeTableName: false,
   timestamps: false
