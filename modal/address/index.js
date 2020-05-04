@@ -4,31 +4,31 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 10:26:30
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-10 21:58:16
+ * @LastEditTime: 2020-05-04 21:38:47
  */
 const Sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 
 const address = mysql.define('address', {
-  uid: {
+  uid: {          // 用户ID
     type: Sequelize.STRING
   },
-  name: {
+  name: {          // 用户名称
     type: Sequelize.STRING
   },
-  mobile: {
+  mobile: {        // 用户手机
     type: Sequelize.STRING
   },
-  addressName: {
+  addressName: {   // 用户地址
     type: Sequelize.STRING
   },
-  address: {
+  address: {       // 详细地址
     type: Sequelize.STRING
   },
-  area: {
+  area: {           // 区域
     type: Sequelize.STRING
   },
-  isDefault: {
+  isDefault: {      // 是否是默认地址
     type: Sequelize.BOOLEAN,
     defaultValue: false
   }

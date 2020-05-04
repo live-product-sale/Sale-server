@@ -4,33 +4,33 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:55:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-01 15:00:38
+ * @LastEditTime: 2020-05-04 21:18:32
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const orderDetail = require('./order-detail')
 const order = mysql.define('order', {
-  order_id: {
+  order_id: {                 // 订单ID
     type: sequelize.STRING,
     primaryKey: true
   }, 
-  order_state: {
+  order_state: {               // 订单状态
     type: sequelize.STRING,
     defaultValue: "1"          // 1: 待付款， 2:待收货， 3: 待评价， 4: 已完成
   },
-  shop_id: {
+  shop_id: {                   // 店铺ID
+    type: sequelize.STRING
+  }, 
+  shop_name: {                 // 店铺名称
     type: sequelize.STRING
   },
-  shop_name: {
-    type: sequelize.STRING
-  },
-  shop_avatar: {
+  shop_avatar: {               // 店铺头像
     type:sequelize.STRING
   },
-  uid: {
+  uid: {                       // 用户ID
     type: sequelize.STRING
   },
-  address_id: {
+  address_id: {                // 地址ID
     type: sequelize.STRING
   }
 }, {

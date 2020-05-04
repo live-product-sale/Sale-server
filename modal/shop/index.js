@@ -3,20 +3,20 @@ const mysql = require('../../db/mysql/index')
 const live = require('../live')
 
 const shop = mysql.define('shop', {
-  shop_id: {
+  shop_id: {      // 店铺ID
     type: Sequelize.STRING,
     PrimaryKey: true
   },
-  shop_name: {
+  shop_name: {    // 店铺名称
     type: Sequelize.STRING
   },
-  shop_avatar: {
+  shop_avatar: {  // 店铺头像
     type: Sequelize.STRING
   },
-  uid: {
+  uid: {          // 用户ID
     type: Sequelize.STRING
   },
-  live_id: {
+  live_id: {      // 直播间ID
     type: Sequelize.STRING
   }
 }, {
