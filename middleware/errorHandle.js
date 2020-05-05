@@ -4,7 +4,7 @@ const { resCode } = require('../util/errorCode')
 const errorHandle = async (ctx, next) => {
   try {
     await next()
-  } catch(err) {
+  } catch (err) {
     console.log(err)
     return ctx.body = uniformRes(resCode.ERROR, null)
   }

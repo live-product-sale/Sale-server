@@ -35,8 +35,12 @@ class cusController {
       where: { cphone },
       include: [userInfo]
     })
+    // console.log(result)
     if (result.cpassword === cpassword) {
-      const data = { token: createToken({ cphone, cpassword }), userinfo: result }
+      const data = { 
+        token: createToken({ cphone, cpassword }), 
+        userinfo: result 
+      }
       return ctx.body = uniformRes(resCode.SUCCESS, data)
     } else {
       return ctx.body = uniformRes(resCode.USER_PASSWORD_ERR, null)
