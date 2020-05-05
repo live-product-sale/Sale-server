@@ -2,22 +2,23 @@ const Sequelize = require('sequelize')
 const mysql = require('../../db/mysql/index')
 
 const buried = mysql.define('burried', {
-  uid: {
+  // 对用户观看直播的时间统计
+  uid: {     //用户ID
     type: Sequelize.STRING
   },
-  live_id: {
+  live_id: { // 直播ID 
     type: Sequelize.STRING
   },
-  range_id: {
+  range_id: { // 直播间范围ID
     type: Sequelize.STRING
   },
-  enter_time:{
+  enter_time:{ // 进入直播间 时间戳
     type: Sequelize.STRING
   },
-  out_time: {
+  out_time: {  // 离开直播间 时间戳
     type: Sequelize.STRING
   },
-  diff_time: {
+  diff_time: { // 时间差 离开时间 - 进入时间
     type: Sequelize.STRING
   }
 }, {
