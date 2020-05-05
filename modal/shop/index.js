@@ -13,6 +13,12 @@ const shop = mysql.define('shop', {
   shop_avatar: {
     type: Sequelize.STRING
   },
+  address: {
+    type: Sequelize.STRING
+  },
+  phone: {
+    type: Sequelize.STRING
+  },
   uid: {
     type: Sequelize.STRING
   },

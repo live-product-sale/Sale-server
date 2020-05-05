@@ -15,7 +15,7 @@ class Common {
     const img = pic.getBase64()
     const imgbase64 = new Buffer.from(img, 'base64')
     ctx.set('Content-Type', 'image/png')
-    return ctx.body = imgbase64
+    return ctx.body = uniformRes(resCode.SUCCESS, imgbase64)
   }
   // 获取短信验证码
   static async getMsgCode(ctx) {
