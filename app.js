@@ -42,6 +42,7 @@ app.use(views(__dirname + '/views', {
 }))
 
 // routes
-app.use(allRoutes.routes(), allRoutes.allowedMethods())
 app.use(errorHandle)
+app.use(allRoutes.routes(), allRoutes.allowedMethods())
+
 module.exports = app

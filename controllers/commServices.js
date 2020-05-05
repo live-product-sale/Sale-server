@@ -30,6 +30,5 @@ class Common {
       return ctx.body = uniformRes(resCode.ERROR, JSON.parse(result).return_code)
     }
   }
-
 }
 module.exports = Common

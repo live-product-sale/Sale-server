@@ -30,41 +30,26 @@ class sortService {
   // 根据range_id 获取具体产品类型
   static async getSortByRange(ctx) {
     const { range_id } = ctx.request.query
-    try {
-      const result = await sortModal.findAll({
-        where: { range_id }
-      })
-      result.unshift({ name: "全部" })
-      return ctx.body = uniformRes(resCode.SUCCESS, result )
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }
+    const result = await sortModal.findAll({
+      where: { range_id }
+    })
+    result.unshift({ name: "全部" })
+    return ctx.body = uniformRes(resCode.SUCCESS, result )
   }
   // 获取直播间的类型范围
   static async getAllRange(ctx) {
-    try {
-      const result = await rangeModal.findAll(
-        { attributes: ["name"] }
-      )
-      return ctx.body = uniformRes(resCode.SUCCESS, result )
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }
+    const result = await rangeModal.findAll(
+      { attributes: ["name"] }
+    )
+    return ctx.body = uniformRes(resCode.SUCCESS, result )
   }
   // 根据range_id 获取sort
   static async getSortByRangeId(ctx) {
     const { range_id } = ctx.request.query
-    try {
-      const result = await sortModal.findAll({
-        where: { range_id }
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, result )
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }
+    const result = await sortModal.findAll({
+      where: { range_id }
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, result )
   }
 }
 module.exports = sortService

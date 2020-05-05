@@ -9,7 +9,7 @@
 const cartModal = require('../../modal/cart')
 // const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
-const {    resCode } = require('../../util/errorCode')
+const { resCode } = require('../../util/errorCode')
 
 class cartService {
   /**
@@ -18,14 +18,11 @@ class cartService {
    */
   static async getCart(ctx) {
     const { uid } = ctx.request.query
-    try {
-      const result = await cartModal.findAll({
-        where: { uid }
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, result )
-    } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }
+    const result = await cartModal.findAll({
+      where: { uid }
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, result )
+   
   }
   /**
    * 添加商品到购物车
@@ -33,35 +30,29 @@ class cartService {
    */
   static async increaseCart(ctx) {
     const data = ctx.request.body
-    // console.log(data)
-    try {
-      const result = await cartModal.findAll({
+    const result = await cartModal.findAll({
+      where: {
+        shop_id: data.shop_id,
+        uid: data.uid,
+        goods_id: data.goods_id,
+        net_weight: data.net_weight,
+        specification: data.specification,
+      }
+    })
+    if (result.length > 0) {
+      await cartModal.update({
+        goods_num: parseInt(result[0].goods_num) + parseInt(data.goods_num)
+      }, {
         where: {
-          shop_id: data.shop_id,
-          uid: data.uid,
-          goods_id: data.goods_id,
-          net_weight: data.net_weight,
-          specification: data.specification,
+          cart_id: result[0].cart_id
         }
       })
-      // console.log(result)
-      if (result.length > 0) {
-        await cartModal.update({
-          goods_num: parseInt(result[0].goods_num) + parseInt(data.goods_num)
-        }, {
-          where: {
-            cart_id: result[0].cart_id
-          }
-        })
-      } else {
-        const cart_id = Date.now().toString().substr(6, 6) + Math.random().toString().substr(2, 2)
-        data["cart_id"] = cart_id
-        await cartModal.create(data)
-      }
-      return ctx.body = uniformRes(resCode.SUCCESS, null )
-    } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null )
+    } else {
+      const cart_id = Date.now().toString().substr(6, 6) + Math.random().toString().substr(2, 2)
+      data["cart_id"] = cart_id
+      await cartModal.create(data)
     }
+    return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
   /**
    * 删除商品在购物车中
@@ -69,17 +60,13 @@ class cartService {
    */
   static async deleteGoodsInCart(ctx) {
     const { uid, cart_id } = ctx.request.body
-    try {
-      await cartModal.destroy({
-        where: {
-          uid,
-          cart_id
-        }
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, null )
-    } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }
+    await cartModal.destroy({
+      where: {
+        uid,
+        cart_id
+      }
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
   /**
    * 改变购物车中的状态
@@ -87,14 +74,10 @@ class cartService {
    */
   static async changCartstatus(ctx) {
     const { cart_id, status } = ctx.request.query
-    try {
-      const result = await cartModal.update({
-        goods_checked: status
-      }, { where: { cart_id } })
-      return ctx.body = uniformRes(resCode.SUCCESS, result )
-    } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }
+    const result = await cartModal.update({
+      goods_checked: status
+    }, { where: { cart_id } })
+    return ctx.body = uniformRes(resCode.SUCCESS, result )
   }
   /**
    * 改变购物车中商品的数量
@@ -102,14 +85,11 @@ class cartService {
    */
   static async changCartGoodsNum(ctx) {
     const { cart_id, goods_num } = ctx.request.query
-    try {
-      await cartModal.update({
-        goods_num
-      }, { where: { cart_id } })
-      return ctx.body = uniformRes(resCode.SUCCESS, null )
-    } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    } 
+    await cartModal.update({
+      goods_num
+    }, { where: { cart_id } })
+    return ctx.body = uniformRes(resCode.SUCCESS, null )
+   
   }
   /**
    *  清空购物车
@@ -117,14 +97,11 @@ class cartService {
    */
   static async deleteAllCart(ctx) {
     const { uid } = ctx.request.body
-    try {
-      await cartModal.destroy({
-        where: { uid }
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, null )
-    } catch(err) {
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }  
+    await cartModal.destroy({
+      where: { uid }
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, null )
+   
   }
 }
 

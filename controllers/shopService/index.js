@@ -14,47 +14,29 @@ const { resCode } = require('../../util/errorCode')
 class shopService {
   // 用户创建商店
   static async createShop(ctx) {
-    const { uid, shop_name, shop_avatar } = ctx.request.body
+    const data = ctx.request.body
     const shop_id = generateId()
-    try {
-      const result = await shopModal.create({
-        shop_id,
-        uid,
-        shop_name,
-        shop_avatar
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, result )
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }
+    const result = await shopModal.create({
+      shop_id,
+      ...data
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, result )
   }
   // 根据uid获取商店
   static async getShopInfo(ctx) {
     const { uid } = ctx.request.query
-    try {
-      const result = await shopModal.findAll({
-        where: { uid }
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, result )
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }
-    
+    const result = await shopModal.findAll({
+      where: { uid }
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, result )
   }
   //根据shop_id 获取信息
   static async getShopByShopId(ctx) {
     const { shop_id } = ctx.request.query
-    try {
-      const result = await shopModal.findOne({
-        where: { shop_id }
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, result )
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null )
-    }  
+    const result = await shopModal.findOne({
+      where: { shop_id }
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, result )
   }
 }
 module.exports = shopService

@@ -11,70 +11,50 @@ class cusController {
   //更新登陆状态
   static async updateLogin(ctx) {
     const { uid, cphone } = ctx.request.body
-    try {
-      const result = await userModal.findOne({
-        where: { uid, cphone },
-        attributes: ["cpassword"]
-      })
-      const cpassword = result.cpassword
-      const Info = await userModal.findOne({
-        where: { cphone, cpassword },
-        include: [userInfo],
-        attributes: { exclude: ["cpassword"] }
-      })
-      const data = {
-        token: createToken({ cphone, cpassword }),
-        userinfo: Info
-      }
-      result ? ctx.body = uniformRes(resCode.SUCCESS, data) : ''
-      return;
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null)
+    const result = await userModal.findOne({
+      where: { uid, cphone },
+      attributes: ["cpassword"]
+    })
+    const cpassword = result.cpassword
+    const Info = await userModal.findOne({
+      where: { cphone, cpassword },
+      include: [userInfo],
+      attributes: { exclude: ["cpassword"] }
+    })
+    const data = {
+      token: createToken({ cphone, cpassword }),
+      userinfo: Info
     }
+    result ? ctx.body = uniformRes(resCode.SUCCESS, data) : ''
+    return
   }
   // 处理登陆
   static async login(ctx) {
     const { cphone, cpassword } = ctx.request.body
-    try {
-      const result = await userModal.findOne({
-        where: { cphone },
-        include: [userInfo]
-        // attributes: ['cpassword']
-      })
-      // console.log(result)
-      if (result.cpassword === cpassword) {
-        const data = { token: createToken({ cphone, cpassword }), userinfo: result }
-        return ctx.body = uniformRes(resCode.SUCCESS, data)
-      } else {
-        return ctx.body = uniformRes(resCode.USER_PASSWORD_ERR, null)
-      }
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null)
+    const result = await userModal.findOne({
+      where: { cphone },
+      include: [userInfo]
+    })
+    if (result.cpassword === cpassword) {
+      const data = { token: createToken({ cphone, cpassword }), userinfo: result }
+      return ctx.body = uniformRes(resCode.SUCCESS, data)
+    } else {
+      return ctx.body = uniformRes(resCode.USER_PASSWORD_ERR, null)
     }
   }
   // 处理注册
   static async register(ctx) {
     const { cpassword, cphone } = ctx.request.body
     const uid = generateId()
-    try {
-      const user = await userModal.findOne({
-        where: { cphone }
-      })
-      await userModal.create(
-        { uid, cphone, cpassword },
-      )
-      await userInfo.create({ uid })
-      if (!user) {
-        return ctx.body = uniformRes(resCode.SUCCESS, null)
-      } else {
-        return ctx.body = uniformRes(resCode.EXIST, null)
-      }
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null)
-    }
+    const user = await userModal.findOne({
+      where: { cphone }
+    })
+    await userModal.create(
+      { uid, cphone, cpassword },
+    )
+    await userInfo.create({ uid })
+    user ? ctx.body = uniformRes(resCode.EXIST, null) : ctx.body = uniformRes(resCode.SUCCESS, null)
+    return
   }
   // 修改密码
   static async modifyPass(ctx) {
@@ -82,91 +62,65 @@ class cusController {
     if (!cphone) {
       return ctx.body = uniformRes(resCode.LACK, null)
     }
-    try {
-      const result = await userModal.findOne({
-        where: { cphone }
-      })
-      if (!result) {
-        return ctx.body = uniformRes(resCode.EXIST, null)
-      }
-      const res = await userModal.update(
-        { cpassword },
-        { where: { cphone } })
-      if (res) {
-        return ctx.body = uniformRes(resCode.SUCCESS, null)
-      }
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null)
+    const result = await userModal.findOne({
+      where: { cphone }
+    })
+    if (!result) {
+      return ctx.body = uniformRes(resCode.EXIST, null)
+    }
+    const res = await userModal.update(
+      { cpassword },
+      { where: { cphone } })
+    if (res) {
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
     }
   }
   // 获取用户信息
   static async getUserInfo(ctx) {
     const { uid } = ctx.request.query
-    try {
-      const result = await userModal.findOne({
-        where: { uid },
-        attributes: { exclude: ["cpassword"] },
-        include: [userInfo]
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, result)
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null)
-    }
+    const result = await userModal.findOne({
+      where: { uid },
+      attributes: { exclude: ["cpassword"] },
+      include: [userInfo]
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
   // 完善用户信息
   static async perfectUserInfo(ctx) {
     const { uid, name, gender, avatar } = ctx.request.body
-    try {
-      const res = await userInfo.findOne({
-        where: { uid }
-      })
-      if (!res) {
-        await userInfo.create({ uid, name, gender, avatar })
-      } else {
-        await userInfo.update({ name, gender, avatar }, {
-          where: { uid }
-        })
-      }
-      return ctx.body = uniformRes(resCode.SUCCESS, null)
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null)
-    }
+    const res = await userInfo.findOne({
+      where: { uid }
+    })
+    res ? await userInfo.create({ uid, name, gender, avatar }) :  
+          await userInfo.update({ name, gender, avatar }, 
+            {
+              where: { uid }
+            })
+    return ctx.body = uniformRes(resCode.SUCCESS, null)
   }
 
   static async getUserNameByuid(ctx) {
     const { uid } = ctx.request.query
-    try {
-      const result = await userInfo.findOne({
-        where: { uid },
-        attributes: ["name", "avatar"]
-      })
-      return ctx.body = uniformRes(resCode.SUCCESS, result)
-    } catch (err) {
-      return ctx.body = uniformRes(resCode.ERROR, null)
-    }
+    const result = await userInfo.findOne({
+      where: { uid },
+      attributes: ["name", "avatar"]
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
   // 更新密码
   static async updatePassword(ctx) {
     const { uid, cphone, oldPassword, newPassword } = ctx.request.body
-    try {
-      const result = await userModal.findOne({
-        where: { uid, cphone },
-        attributes: ["cpassword"]
-      })
-      if (result.cpassword === oldPassword) {
-        await userModal.update({
-          cpassword: newPassword
-        }, { where: { uid, cphone } })
-        return ctx.body = uniformRes(resCode.SUCCESS, null)
-      } else {
-        return ctx.body = uniformRes(resCode.EXIST, null)
-      }
-    } catch (err) {
-      console.log(err)
-      return ctx.body = uniformRes(resCode.ERROR, null)
+    const result = await userModal.findOne({
+      where: { uid, cphone },
+      attributes: ["cpassword"]
+    })
+    if (result.cpassword === oldPassword) {
+      await userModal.update({
+        cpassword: newPassword
+      }, { where: { uid, cphone } })
+      return ctx.body = uniformRes(resCode.SUCCESS, null)
+    } else {
+      return ctx.body = uniformRes(resCode.EXIST, null)
     }
   }
 }

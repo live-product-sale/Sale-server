@@ -1,15 +1,12 @@
 const { uniformRes } = require('../util/utils')
 const { resCode } = require('../util/errorCode')
 
-const errorHandle = (ctx, next) => {
-  return next().catch(err => {
-    if (err.status === 401) {
-      ctx.status = 401
-      // console.log('error')
-      return ctx.body = uniformRes(resCode.UNLOGIN, null)
-    } else {
-      throw err
-    }
-  })
+const errorHandle = async (ctx, next) => {
+  try {
+    await next()
+  } catch(err) {
+    console.log(err)
+    return ctx.body = uniformRes(resCode.ERROR, null)
+  }
 }
 module.exports = errorHandle

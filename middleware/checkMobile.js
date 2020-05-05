@@ -26,19 +26,12 @@ const IsMobile = async (ctx, next) => {
  */
 const IsMobileRegisted = async (ctx, next) => {
   let cphone;
-  if (ctx.request.method === 'GET') {
-    cphone = ctx.request.query.cphone
-  } else {
-    cphone = ctx.request.body.cphone
-  }
+  ctx.request.method === 'GET' ? cphone = ctx.request.query.cphone :  cphone = ctx.request.body.cphone
   const mob_res = await userModal.findOne({
     where: { cphone }
   })
-  if (mob_res) {
-    return ctx.body = uniformRes(resCode.EXIST, null)
-  } else {
-    await next()
-  }
+  mob_res ? ctx.body = uniformRes(resCode.EXIST, null) :  await next()
+  return
 }
 /**
  * 处理用户名是否被使用
@@ -50,11 +43,8 @@ const IsNameUsed = async (ctx, next) => {
   const cur_res = await userModal.findOne({
     where: { cname }
   })
-  if (cur_res) {
-    return ctx.body = uniformRes(resCode.EXIST, null)
-  } else {
-    await next()
-  }
+  cur_res ? ctx.body = uniformRes(resCode.EXIST, null) : await next()
+  return
 }
 const IsName = async (ctx, next) => {
   const { cname } = ctx.request.body
