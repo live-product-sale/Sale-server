@@ -14,7 +14,17 @@ const shopMoal = require('../../modal/shop')
 const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
 const { resCode } = require('../../util/errorCode')
-
+ 
+ // 处理时间
+function dealTime() {
+  const myDate = new Date()
+  let array = myDate.toLocaleDateString().split("/")
+  let date = array[0]
+  let time = myDate.toLocaleTimeString().split(":")
+  let hour = time[0]
+  let minute = time[1]
+  return `${date} ${hour}:${minute}`
+}
 class orderService {
   // 订单数据模版
   static async orderModal(ctx) {
@@ -48,6 +58,7 @@ class orderService {
   // 创建订单
   static async createOrder(ctx) {
     const { shopInfo, goodsInfo, uid, address_id } = ctx.request.body
+    // console.log(goodsInfo)
     let total_price = 0
     const order_id = Date.now()
     shopInfo.forEach(item => {
@@ -97,7 +108,7 @@ class orderService {
   static async getOrderList(ctx) {
     const { order_state, uid, offset, limit } = ctx.request.query
     let orderList = []
-    console.log(order_state)
+    // console.log(order_state)
     if (order_state === '0') {
       orderList = await orderModal.findAll({
         where: { uid },
@@ -123,14 +134,14 @@ class orderService {
   // 取消订单
   static async cancelOrder(ctx) {
     const { order_id, order_state, uid } = ctx.request.body
-    await orderModal.destroy({
-      where: { order_id, order_state, uid }
-    })
     await orderDetail.destroy({
       where: { order_id }
     })
     await payOrder.destroy({
       where: { uid, order_id }
+    })
+    await orderModal.destroy({
+      where: { order_id, order_state, uid }
     })
     return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
@@ -138,15 +149,17 @@ class orderService {
   // 删除订单
   static async deleteOrder(ctx) {
     const { order_id, uid } = ctx.request.body
+     await orderDetail.destroy({
+      where: { order_id }
+    })
+     await payOrder.destroy({
+      where: { order_id, uid }
+    })
     await orderModal.destroy({
       where: { order_id, uid }
     })
-    await orderDetail.destroy({
-      where: { order_id }
-    })
-    await payOrder.destroy({
-      where: { order_id, uid }
-    })
+   
+   
     return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
 
@@ -161,10 +174,11 @@ class orderService {
 
   // 完成评论
   static async finishAssess(ctx) {
-    const { uid, order_id, score, assess } = ctx.request.body
+    const data= ctx.request.body
+    console.log(data, dealTime())
     await orderModal.update({
       order_state: 4
-    }, { where: { order_id, uid } })
+    }, { where: { order_id: data.order_id, uid: data.uid } })
     return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
 

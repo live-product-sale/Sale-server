@@ -17,6 +17,9 @@ const orderDetail = mysql.define('orderDetail', {
   shop_id: {        // 店铺ID
     type: sequelize.STRING
   },
+  goods_id: {       // 商品ID
+    type: sequelize.STRING
+  },
   goods_name: {     // 商品名称
     type: sequelize.STRING
   },
