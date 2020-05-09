@@ -4,13 +4,14 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:02:35
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-01 14:59:15
+ * @LastEditTime: 2020-05-09 20:20:17
  */
 const orderModal = require('../../modal/order')
 const orderDetail = require('../../modal/order/order-detail')
 const payOrder = require('../../modal/order/order-pay')
 const cartMoal = require('../../modal/cart')
 const shopMoal = require('../../modal/shop')
+const commentModal = require('../../modal/comment')
 const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
 const { resCode } = require('../../util/errorCode')
@@ -19,11 +20,13 @@ const { resCode } = require('../../util/errorCode')
 function dealTime() {
   const myDate = new Date()
   let array = myDate.toLocaleDateString().split("/")
-  let date = array[0]
+  let year = array[0]
+  let month = array[1]
+  let day = array[2]
   let time = myDate.toLocaleTimeString().split(":")
   let hour = time[0]
   let minute = time[1]
-  return `${date} ${hour}:${minute}`
+  return `${year}-${month}-${day},${hour}:${minute}`
 }
 class orderService {
   // 订单数据模版
@@ -175,10 +178,11 @@ class orderService {
   // 完成评论
   static async finishAssess(ctx) {
     const data= ctx.request.body
-    console.log(data, dealTime())
+    const comment_date = dealTime()
     await orderModal.update({
       order_state: 4
     }, { where: { order_id: data.order_id, uid: data.uid } })
+    await commentModal.create({...data, comment_date })
     return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
 

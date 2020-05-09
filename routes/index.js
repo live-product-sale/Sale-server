@@ -9,6 +9,7 @@ const orderRoute = require('./order')
 const addressRoute = require('./address')
 const sortRoute = require('./rangesort')
 const searchRoute = require('./search')
+const commentRoute = require('./comment')
 
 router.prefix('/api/v1')
 router.use(userRoute.routes(), userRoute.allowedMethods())
@@ -21,5 +22,5 @@ router.use(sortRoute.routes(), sortRoute.allowedMethods())
 router.use(addressRoute.routes(), addressRoute.allowedMethods())
 router.use(searchRoute.routes(), searchRoute.allowedMethods())
 router.use(buiredRoute.routes(), searchRoute.allowedMethods())
-
+router.use(commentRoute.routes(), commentRoute.allowedMethods())
 module.exports = router
