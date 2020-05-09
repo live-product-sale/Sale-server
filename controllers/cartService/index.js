@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:40:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-24 20:09:43
+ * @LastEditTime: 2020-05-09 09:45:49
  */
 const cartModal = require('../../modal/cart')
 // const Op = require('sequelize').Op
@@ -30,28 +30,9 @@ class cartService {
    */
   static async increaseCart(ctx) {
     const data = ctx.request.body
-    const result = await cartModal.findAll({
-      where: {
-        shop_id: data.shop_id,
-        uid: data.uid,
-        goods_id: data.goods_id,
-        net_weight: data.net_weight,
-        specification: data.specification,
-      }
-    })
-    if (result.length > 0) {
-      await cartModal.update({
-        goods_num: parseInt(result[0].goods_num) + parseInt(data.goods_num)
-      }, {
-        where: {
-          cart_id: result[0].cart_id
-        }
-      })
-    } else {
-      const cart_id = Date.now().toString().substr(6, 6) + Math.random().toString().substr(2, 2)
-      data["cart_id"] = cart_id
-      await cartModal.create(data)
-    }
+    const cart_id = Date.now().toString().substr(6, 6) + Math.random().toString().substr(2, 2)
+    data["cart_id"] = cart_id
+    await cartModal.create(data)
     return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
   /**
