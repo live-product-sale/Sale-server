@@ -32,9 +32,6 @@ const cart = mysql.define('cart', {
   goods_num: {
     type: sequeslize.STRING
   },
-  goods_stock: {
-    type: sequeslize.STRING
-  },
   goods_avatar: {
     type: sequeslize.STRING
   },

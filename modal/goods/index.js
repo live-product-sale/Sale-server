@@ -12,9 +12,6 @@ const goods = mysql.define('goods', {
   goods_price: {    // 商品价格
     type: Sequelize.STRING
   },
-  goods_stock: {    // 商品库存
-    type: Sequelize.STRING
-  },
   goods_avatar: {   // 商品图片
     type: Sequelize.STRING
   },
@@ -22,7 +19,16 @@ const goods = mysql.define('goods', {
     type: Sequelize.STRING,
     defaultValues: "1"       // 1:未发布 ，2:已发布， 3: 已下架
   },
-  shop_id: {
+  goods_stock: {    // 商品库存
+    type: Sequelize.STRING
+  },
+  goods_sales: {    // 商品销量
+    type: Sequelize.STRING
+  },
+  goods_views: {    // 商品浏览量
+    type: Sequelize.STRING
+  },
+  shop_id: {        // 店铺ID
     type: Sequelize.STRING
   }
 }, {

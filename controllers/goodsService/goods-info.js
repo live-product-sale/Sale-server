@@ -28,11 +28,13 @@ class GoodsInfoService {
   static async getGoodsInfo(ctx) {
     const { goods_id } = ctx.request.query
     const detail = await goodsInfoModal.findAll({
-      where: { goods_id }
+      where: { goods_id },
+      attributes: { exclude: ["goods_id"]}
     })
     const result = await goodsModal.findOne({
       where: { goods_id }
     })
+    console.log(result)
     return ctx.body = uniformRes(resCode.SUCCESS, { result, detail } )
   }
 }
