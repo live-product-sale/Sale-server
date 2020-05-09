@@ -49,15 +49,12 @@ class cusController {
   // 处理注册
   static async register(ctx) {
     const { cpassword, cphone } = ctx.request.body
+    console.log('zhuce')
     const uid = generateId()
-    const user = await userModal.findOne({
-      where: { cphone }
-    })
     await userModal.create(
       { uid, cphone, cpassword },
-    )
-    await userInfo.create({ uid })
-    user ? ctx.body = uniformRes(resCode.EXIST, null) : ctx.body = uniformRes(resCode.SUCCESS, null)
+    )  && await userInfo.create({ uid })
+    ctx.body = uniformRes(resCode.SUCCESS, null)
     return
   }
   // 修改密码
@@ -92,14 +89,12 @@ class cusController {
   // 完善用户信息
   static async perfectUserInfo(ctx) {
     const { uid, name, gender, avatar } = ctx.request.body
-    const res = await userInfo.findOne({
-      where: { uid }
-    })
-    res ? await userInfo.create({ uid, name, gender, avatar }) :  
-          await userInfo.update({ name, gender, avatar }, 
-            {
-              where: { uid }
-            })
+    await userInfo.update({ 
+      name, 
+      gender, 
+      avatar 
+    }, 
+      { where: { uid } })
     return ctx.body = uniformRes(resCode.SUCCESS, null)
   }
 
@@ -122,9 +117,9 @@ class cusController {
       await userModal.update({
         cpassword: newPassword
       }, { where: { uid, cphone } })
-      return ctx.body = uniformRes(resCode.SUCCESS, null)
+      return ctx.body = uniformRes(resCode.SUCCESS, null, '修改成功')
     } else {
-      return ctx.body = uniformRes(resCode.EXIST, null)
+      return ctx.body = uniformRes(resCode.EXIST, null, '原密码错误')
     }
   }
 }

@@ -19,6 +19,10 @@ const userInfo = mysql.define('userInfo', {
   },
   avatar: {
     type: sequelize.STRING
+  },
+  uid: {
+    type: sequelize.STRING,
+    primaryKey: true
   }
 }, {
   timestamps: false

@@ -23,16 +23,19 @@ class customerService {
     const recoData = await setTable()
     const liveSet = recoData[uid] ? recoData[uid] : []
     console.log(liveSet)
-    const recommendLive = await liveModal.findAll({
-      offset: parseInt(offset),
-      limit: parseInt(limit),
-      attributes: { exclude: ['live_push', 'live_play'] },
-      where: {
-        live_id: {
-          [Op.or]: liveSet
+    let recommendLive = []
+    if(liveSet.length !== 0) {
+        recommendLive = await liveModal.findAll({
+        offset: parseInt(offset),
+        limit: parseInt(limit),
+        attributes: { exclude: ['live_push', 'live_play'] },
+        where: {
+          live_id: {
+            [Op.or]: liveSet
+          }
         }
-      }
-    })
+      })
+    }
     const otherLive = await liveModal.findAll({
       offset: parseInt(offset),
       limit: parseInt(limit) - recommendLive.length,
@@ -145,12 +148,11 @@ class customerService {
   static async enterLiveWithUser(ctx) {
     const data = ctx.request.body
     const buriedObj = await buried.findOne({
-      where: { uid: data.uid, live_id: data.live_id },
-      attributes: ['id']
+      where: { uid: data.uid, live_id: data.live_id }
     })
-    buriedObj.id ? await buried.update({
+    buriedObj? await buried.update({
       enter_time: data.enter_time
-    }, { where: { id: buriedObj.id } }) : await buried.create(data)
+    }, { where: { uid: data.uid, live_id: data.live_id } }) : await buried.create(data)
     return ctx.body = uniformRes(resCode.SUCCESS, null)
    
   }

@@ -19,6 +19,15 @@ const shop = mysql.define('shop', {
   phone: {
     type: Sequelize.STRING
   },
+  shop_amount: {
+    type: Sequelize.STRING
+  },
+  business_hour: {
+    type: Sequelize.STRING
+  },
+  instructions: {
+    type: Sequelize.STRING
+  },
   uid: {
     type: Sequelize.STRING
   },

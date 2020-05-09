@@ -57,11 +57,11 @@ const generateId = () => {
  *  @returns { Object } result
  */
 const { errMsg } = require('./errorCode')
-const uniformRes = (code, result) => {
+const uniformRes = (code, result, msg) => {
   return {
     code,
     data: result,
-    msg: code === '000000' && result == null ? '数据为空' : errMsg[code]
+    msg: msg? msg : errMsg[code]
   }
 }
 module.exports = {

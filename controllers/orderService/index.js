@@ -97,6 +97,7 @@ class orderService {
   static async getOrderList(ctx) {
     const { order_state, uid, offset, limit } = ctx.request.query
     let orderList = []
+    console.log(order_state)
     if (order_state === '0') {
       orderList = await orderModal.findAll({
         where: { uid },

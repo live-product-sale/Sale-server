@@ -14,9 +14,11 @@ class AddressServie {
   // 获取用户的收件地址
   static async getAddressData(ctx) {
     const { uid } = ctx.request.query
+    // console.log(uid)
     const data = await addressModal.findAll({
       where: { uid }
     })
+    // console.log(data)
     return ctx.body = uniformRes(resCode.SUCCESS, data)
   }
   //更新或创建地址
@@ -58,25 +60,12 @@ class AddressServie {
   }
   // 修改地址状态
   static async changeAddressStatu(ctx) {
-    const { uid, id, isDefault } = ctx.request.query 
-    const defaultAddress = await addressModal.findOne({
-      where: { uid, isDefault: true },
-      attributes: ["id", "uid"]
-    })
-    if (!defaultAddress) {
-      await addressModal.update(
-        { isDefault },
-        { where: { uid, id } })
-    } else {
-      await addressModal.update({
-        isDefault: false
-      }, { where: { id: defaultAddress.id, uid: defaultAddress.uid } })
-      await addressModal.update(
-        { isDefault },
-        { where: { uid, id } })
-    }
-    return ctx.body = uniformRes(resCode.SUCCESS, null)
-    
+    const { uid, id, isDefault } = ctx.request.query
+    console.log(uid, id, isDefault)
+    await addressModal.update(
+      { isDefault: true },
+      { where: { uid, id }})
+    return ctx.body = uniformRes(resCode.SUCCESS, null) 
   }
   // 删除地址
   static async deleteAddress(ctx) {
