@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production nodemon bin/www",
-    "dev": "NODE_ENV=development ./node_modules/.bin/nodemon bin/www",
+    "dev": "NODE_ENV=development nodemon bin/www",
     "prd": "pm2 start bin/www --env=production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

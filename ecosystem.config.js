@@ -1,20 +1,17 @@
-/*
- * @Description: pm2 部署配置文件
- * @Author: zhangmeng
- * @Github: https://github.com/ZNVICTORY
- * @Date: 2020-04-06 22:34:11
- * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-06 22:40:46
- */
 module.exports = {
   apps : [{
-    name: "app",
-    script: "./bin/www",
-    env: {
-      NODE_ENV: "development",
+    name: 'Sale_Server',
+    script: 'bin/www',
+
+    instances: 1,
+    autorestart: true,
+    watch: false,
+    max_memory_restart: '1G',
+    env_development: {
+      NODE_ENV: 'development'
     },
     env_production: {
-      NODE_ENV: "production",
+      NODE_ENV: 'production'
     }
   }]
-}
+};
