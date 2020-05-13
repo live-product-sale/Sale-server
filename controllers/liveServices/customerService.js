@@ -4,19 +4,26 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-01 15:24:41
+ * @LastEditTime: 2020-05-13 15:11:51
  */
 const Op = require('sequelize').Op
-const liveModal = require('../../modal/live')
+const live = require('../../modal/live')
 const followLiveModal = require('../../modal/live/followLive')
 const buried = require('../../modal/live/buried')
 const { uniformRes } = require('../../util/utils')
 const { resCode } = require('../../util/errorCode')
 const setTable = require('../../util/recommend/index')
+const shop = require('../../modal/shop')
+const goods = require('../../modal/goods')
+const goodsInfo = require('../../modal/goods/goodsInfo')
 
+/**
+ * @param { Array } liveArray
+ * @param { Array } shopArray
+ * @return {Array } result
+ */
 class customerService {
   //推荐直播
-
   // 按分页查询直播间信息
   static async getLiveList(ctx) {
     const { offset, limit, uid } = ctx.request.query
@@ -24,37 +31,48 @@ class customerService {
     const liveSet = recoData[uid] ? recoData[uid] : []
     console.log(liveSet)
     let recommendLive = []
+    const whereObj1 = { 
+      live_id: { [Op.or]: liveSet }
+    }
+    const includeObj = [
+      { 
+        model: live, 
+        attributes: ["live_avatar", "status", "att_amount", "view_amount", "live_id"]
+      }, { 
+        model: goods, 
+        offset: 0, 
+        limit: 1, 
+        attributes: ["goods_avatar"], 
+        include: [{ model: goodsInfo, attributes: ["goods_price"]}]
+      }]
     if(liveSet.length !== 0) {
-        recommendLive = await liveModal.findAll({
-        offset: parseInt(offset),
-        limit: parseInt(limit),
-        attributes: { exclude: ['live_push', 'live_play'] },
-        where: {
-          live_id: {
-            [Op.or]: liveSet
-          }
-        }
+        recommendLive = await shop.findAll({
+        offset: Number(offset),
+        limit: Number(limit),
+        where: whereObj1,
+        attributes: [ "shop_name", "shop_avatar", "instructions"],
+        include: includeObj
       })
     }
-    const otherLive = await liveModal.findAll({
-      offset: parseInt(offset),
-      limit: parseInt(limit) - recommendLive.length,
-      where: {
-        live_id: {
-          [Op.not]: liveSet
-        }
-      }
+    const whereObj2 = { live_id: { [Op.not]: liveSet } }
+    let otherLive = await shop.findAll({
+      offset: Number(offset),
+      limit: Number(limit) - recommendLive.length,
+      where: whereObj2,
+      attributes: [ "shop_name", "shop_avatar", "instructions"],
+      include: includeObj
     })
-    return ctx.body = uniformRes(resCode.SUCCESS, [...recommendLive, ...otherLive])
+    let allLive = [...recommendLive, ...otherLive]
+    return ctx.body = uniformRes(resCode.SUCCESS,allLive )
   }
   // 根据Live_id获取直播间拉流信息
   static async getLivePlay(ctx) {
     const { live_id, uid } = ctx.request.query
-    const result = await liveModal.findOne({
+    const includeObj = [ { model: shop, attributes: ["shop_name", "shop_avatar", "shop_id"]}]
+    const result = await live.findOne({
       where: { live_id },
-      attributes: {
-        exclude: ['live_push', 'shop_slogan', 'good_price', 'good_avatar', 'status', 'sort_id']
-      }
+      attributes: ["live_id", "live_avatar", "live_url"],
+      include: includeObj
     })
     const resultOriented = await followLiveModal.findOne({
       where: { uid, live_id }
@@ -65,20 +83,20 @@ class customerService {
   // 关注直播间 或 取消关注
   static async attentionLive(ctx) {
     const { live_id, uid, isfollow } = ctx.request.body
-    const attentResult = await liveModal.findOne({
+    const attentResult = await live.findOne({
       where: { live_id },
       attributes: ['att_amount']
     })
     const att_amount = parseInt(attentResult.att_amount)
     if (isfollow) {
       await followLiveModal.create({ uid, live_id })
-      await liveModal.update({
+      await live.update({
         att_amount: att_amount + 1
       }, {
         where: { live_id }
       })
     } else {
-      await liveModal.update({
+      await live.update({
         att_amount: att_amount === 0 ? att_amount : att_amount - 1
       }, {
         where: { live_id }
@@ -97,25 +115,35 @@ class customerService {
     const { uid } = ctx.request.query
     const live_id = await followLiveModal.findAll({
       where: { uid },
-      attributes: { exclude: ["uid", ] }
+      attributes: { exclude: ["uid"] }
     })
     let id = live_id.map(item => { return item.live_id })
     if (live_id.length === 0) {
       return ctx.body = uniformRes(resCode.SUCCESS, [])
     }
-    const result = await liveModal.findAll({
-      where: {
-        live_id: {
-          [Op.or]: id
-        }
-      }
+    const whereObj = { live_id: { [Op.or]: id}}
+    const includeObj = [
+      { 
+        model: live, 
+        attributes: ["live_avatar", "status", "att_amount", "view_amount", "live_id"]
+      }, { 
+        model: goods, 
+        offset: 0, 
+        limit: 1, 
+        attributes: ["goods_avatar"], 
+        include: [{ model: goodsInfo, attributes: ["goods_price"]}]
+    }]
+    const result = await shop.findAll({
+      where: whereObj,
+      include: includeObj,
+      attributes: [ "shop_name", "shop_avatar", "instructions"],
     })
     return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
   // 按照分类ID 获取直播间
   static async getLiveBySort(ctx) {
     const data = ctx.request.query
-    const result = await liveModal.findAll({
+    const result = await live.findAll({
       where: { ...data },
       attributes: { exclude: ["live_push"] }
     })
@@ -127,17 +155,17 @@ class customerService {
    */
   static async updateViewMount(ctx) {
     const { type, live_id } = ctx.request.body
-    const result = await liveModal.findOne({
+    const result = await live.findOne({
       where: { live_id },
       attributes: ["view_amount"]
     })
     const view_amount = parseInt(result.view_amount)
-    type === 'enter' ? await liveModal.update({
+    type === 'enter' ? await live.update({
       view_amount: view_amount + 1
     }, {
       where: { live_id }
     }) : ""
-    type === 'out' && view_amount > 0 ? await liveModal.update({
+    type === 'out' && view_amount > 0 ? await live.update({
       view_amount: view_amount - 1
     }, {
       where: { live_id }

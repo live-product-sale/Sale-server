@@ -4,10 +4,10 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 12:31:31
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-04 21:40:35
+ * @LastEditTime: 2020-05-13 15:24:59
  */
-const goodsModal = require('../../modal/goods')
-const sortModal = require('../../modal/rangesort')
+const goodsModal = require('../../modal/goods/index')
+// const {goodsinfo = require('../../modal/goods/goodsInfo')
 const { uniformRes } = require('../../util/utils')
 const { resCode } = require('../../util/errorCode')
 
@@ -18,8 +18,10 @@ class goodService {
    */
   static async getGoodsByShopId(ctx) {
     const { shop_id } = ctx.request.query
+    const includeObj = [{ model: goodsInfo , attributes: { exclude: ["goods_id"]}}]
     const result = await goodsModal.findAll({
-      where: { shop_id, goods_state: 1 }
+      where: { shop_id, goods_state: 1 },
+      include: includeObj
     })
     return ctx.body = uniformRes(resCode.SUCCESS, result )  
   }

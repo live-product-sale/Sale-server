@@ -49,7 +49,6 @@ class cusController {
   // 处理注册
   static async register(ctx) {
     const { cpassword, cphone } = ctx.request.body
-    console.log('zhuce')
     const uid = generateId()
     await userModal.create(
       { uid, cphone, cpassword },

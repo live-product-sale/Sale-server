@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize')
 const mysql = require('../../db/mysql/index')
-const live = require('../live')
+const live = require('../live/index')
 
 const shop = mysql.define('shop', {
   shop_id: {      // 店铺ID
-    type: Sequelize.STRING,
-    PrimaryKey: true
+    type: Sequelize.INTEGER,
+    primaryKey: true
   },
   shop_name: {    // 店铺名称
     type: Sequelize.STRING
@@ -13,36 +13,48 @@ const shop = mysql.define('shop', {
   shop_avatar: {  // 店铺头像
     type: Sequelize.STRING
   },
-  address: {
+  address: {      // 店铺地址
     type: Sequelize.STRING
   },
-  phone: {
+  phone: {        // 联系方式
     type: Sequelize.STRING
   },
-  shop_amount: {
+  shop_amount: {   // 店铺关注人数
     type: Sequelize.STRING
   },
-  business_hour: {
+  shop_class: {    // 店铺类型
     type: Sequelize.STRING
   },
-  instructions: {
+  shop_sales: {    // 店铺销量
+    type: Sequelize.STRING
+  },
+  shop_money: {    // 店铺成交额度
+    type: Sequelize.STRING
+  },
+  shop_view: {     // 店铺访问量
+    type: Sequelize.STRING
+  },
+  business_hour: {  // 营业时间
+    type: Sequelize.STRING
+  },
+  instructions: {  // 购买须知
     type: Sequelize.STRING
   },
   uid: {
     type: Sequelize.STRING
   },
   live_id: {      // 直播间ID
-    type: Sequelize.STRING
+    type: Sequelize.INTEGER
   }
 }, {
-  freezeTableName: false,
   timestamps: false
 })
-// shop.belongsTo(live)
 shop.sync({
   force: false
 }).then(() => {
   console.log('shop is successful')
 })
 
+// shop.belongsTo(live, { foreignKey: "live_id", targetKey: "live_id"})
+// live.hasOne(shop, { foreignKey: "live_id", targetKey: "live_id"})
 module.exports = shop

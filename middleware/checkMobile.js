@@ -13,7 +13,7 @@ const IsMobile = async (ctx, next) => {
   } else {
     _cphone = ctx.request.body.cphone
   }
-  console.log(_cphone)
+  // console.log(_cphone)
   if (_cphone === '') {
     return ctx.body = uniformRes(resCode.LACK, null  )
   }

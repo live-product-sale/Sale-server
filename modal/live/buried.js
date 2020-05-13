@@ -9,9 +9,6 @@ const buried = mysql.define('burried', {
   live_id: { // 直播ID 
     type: Sequelize.STRING
   },
-  range_id: { // 直播间范围ID
-    type: Sequelize.STRING
-  },
   enter_time:{ // 进入直播间 时间戳
     type: Sequelize.STRING
   },

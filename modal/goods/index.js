@@ -1,21 +1,22 @@
 const Sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
+const shop = require('../shop/index')
 
 const goods = mysql.define('goods', {
   goods_id: {       // 商品ID
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     primaryKey: true
   },
   goods_name: {     // 商品名称
     type: Sequelize.STRING
   },
-  goods_price: {    // 商品价格
-    type: Sequelize.STRING
-  },
   goods_avatar: {   // 商品图片
     type: Sequelize.STRING
   },
-  goods_state:{     // 商品状态
+  goods_class: {    // 商品类型
+    type: Sequelize.STRING
+  },
+  goods_state: {     // 商品状态
     type: Sequelize.STRING,
     defaultValues: "1"       // 1:未发布 ，2:已发布， 3: 已下架
   },
@@ -29,17 +30,17 @@ const goods = mysql.define('goods', {
     type: Sequelize.STRING
   },
   shop_id: {        // 店铺ID
-    type: Sequelize.STRING
+    type: Sequelize.INTEGER
   }
 }, {
   freezeTableName: false,
   timestamps: false
 })
-
 goods.sync({
   force: false
 }).then(() => {
   console.log('goods is successful')
 })
-
+shop.hasMany(goods, { foreignKey: "shop_id", targetKey: "shop_id"})
+goods.belongsTo(shop, { foreignKey: "shop_id", targetKey: "shop_id"})
 module.exports = goods

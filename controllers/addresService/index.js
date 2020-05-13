@@ -61,7 +61,7 @@ class AddressServie {
   // 修改地址状态
   static async changeAddressStatu(ctx) {
     const { uid, id, isDefault } = ctx.request.query
-    console.log(uid, id, isDefault)
+    // console.log(uid, id, isDefault)
     await addressModal.update(
       { isDefault: true },
       { where: { uid, id }})

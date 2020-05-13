@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-07 21:41:16
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-04-28 18:47:31
+ * @LastEditTime: 2020-05-12 22:29:52
  */
 const goodsInfoModal = require('../../modal/goods/goodsInfo')
 const goodsModal = require('../../modal/goods/index')

@@ -4,13 +4,14 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:02:35
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-09 20:20:17
+ * @LastEditTime: 2020-05-13 14:48:17
  */
 const orderModal = require('../../modal/order')
 const orderDetail = require('../../modal/order/order-detail')
 const payOrder = require('../../modal/order/order-pay')
 const cartMoal = require('../../modal/cart')
-const shopMoal = require('../../modal/shop')
+const shopMoal = require('../../modal/shop/index')
+const goods = require('../../modal/goods/index')
 const commentModal = require('../../modal/comment')
 const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
@@ -39,21 +40,18 @@ class orderService {
     const shopId = cartChecked.map(item => {
       return item.shop_id
     })
+    const whereObj = { shop_id: { [Op.or]: shopId }}
     const shopInfo = await shopMoal.findAll({
-      where: {
-        shop_id: {
-          [Op.or]: shopId
-        }
-      },
-      attributes: { exclude: ["live_id", "uid", "id"] }
+      where: whereObj,
+      attributes: ["shop_id", "shop_name", "shop_avatar"]
     })
-    shopInfo.forEach(item => item.dataValues["goodsInfo"] = [])
+    shopInfo.forEach(item => item.dataValues["goods"] = [])
     shopInfo.forEach(item => {
-      cartChecked.forEach(iitem => {
-        if (iitem.shop_id === item.shop_id) {
-          item.dataValues.goodsInfo.push(iitem.dataValues)
-        }
-      })
+       cartChecked.forEach( iitem => {
+         if(item.shop_id == iitem.shop_id) {
+           item.dataValues.goods.push(iitem.dataValues)
+         }
+       })
     })
     return ctx.body = uniformRes(resCode.SUCCESS, shopInfo )
   }

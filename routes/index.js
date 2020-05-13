@@ -7,7 +7,7 @@ const goodRoute = require('./goods')
 const cartRoute = require('./cart')
 const orderRoute = require('./order')
 const addressRoute = require('./address')
-const sortRoute = require('./rangesort')
+
 const searchRoute = require('./search')
 const commentRoute = require('./comment')
 
@@ -18,7 +18,7 @@ router.use(shopRoute.routes(), shopRoute.allowedMethods())
 router.use(goodRoute.routes(), goodRoute.allowedMethods())
 router.use(cartRoute.routes(), cartRoute.allowedMethods())
 router.use(orderRoute.routes(), orderRoute.allowedMethods())
-router.use(sortRoute.routes(), sortRoute.allowedMethods())
+
 router.use(addressRoute.routes(), addressRoute.allowedMethods())
 router.use(searchRoute.routes(), searchRoute.allowedMethods())
 router.use(buiredRoute.routes(), searchRoute.allowedMethods())
