@@ -30,5 +30,7 @@ router.post('/perfect', userServices.perfectUserInfo)
 router.get('/username', userServices.getUserNameByuid)
 // 密码管理
 router.post('/updatePassword', userServices.updatePassword)
+// 用户反馈意见
+router.post('/advice', userServices.dealAdvice)
 
 module.exports = router

@@ -6,6 +6,7 @@ const {
 const { resCode } = require('../../util/errorCode')
 const userInfo = require('../../modal/user/userinfo')
 const userModal = require('../../modal/user')
+const advice = require('../../modal/advices')
 
 class cusController {
   //更新登陆状态
@@ -35,7 +36,6 @@ class cusController {
       where: { cphone },
       include: [userInfo]
     })
-    // console.log(result)
     if (result.cpassword === cpassword) {
       const data = { 
         token: createToken({ cphone, cpassword }), 
@@ -120,6 +120,13 @@ class cusController {
     } else {
       return ctx.body = uniformRes(resCode.EXIST, null, '原密码错误')
     }
+  }
+  // 意见反馈
+  static async dealAdvice(ctx) {
+    const data = ctx.request.body
+    // console.log(data)
+    await advice.create(data)
+    return ctx.body = uniformRes(resCode.SUCCESS, null)
   }
 }
 

@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 11:24:19
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-13 12:37:44
+ * @LastEditTime: 2020-05-13 21:56:27
  */
 const { generateId } = require('../../util/utils')
 const shopModal = require('../../modal/shop')
@@ -44,6 +44,16 @@ class shopService {
       attributes: attributesObj
     })
     return ctx.body = uniformRes(resCode.SUCCESS, result )
+  }
+  // 根据shop_class获取商品goodsclass
+  static async getGoodsClass(ctx) {
+    const { shop_class } = ctx.request.query
+    const result = await shopModal.findOne({
+      where: { shop_class },
+      attributes: [],
+      include: [{ model: goods, attributes: ["goods_class", "goods_id"]}]
+    })
+    return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
 }
 module.exports = shopService

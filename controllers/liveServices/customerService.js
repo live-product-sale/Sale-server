@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-13 15:11:51
+ * @LastEditTime: 2020-05-13 22:26:00
  */
 const Op = require('sequelize').Op
 const live = require('../../modal/live')
@@ -141,11 +141,23 @@ class customerService {
     return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
   // 按照分类ID 获取直播间
-  static async getLiveBySort(ctx) {
-    const data = ctx.request.query
-    const result = await live.findAll({
-      where: { ...data },
-      attributes: { exclude: ["live_push"] }
+  static async getLiveByshopClass(ctx) {
+    const {shop_class, goods_class} = ctx.request.query
+    const whereObj1 = { shop_class }
+    const whereObj2 = goods_class ? { goods_class } : null
+    const includeObj = [{
+      model: live,
+      attributes: ["live_avatar", "status", "att_amount", "view_amount", "live_id"]
+    }, {
+      model: goods,
+      where: whereObj2,
+      attributes: ["goods_avatar"], 
+      include: [{ model: goodsInfo, attributes: ["goods_price"]}]
+    }]
+    const result = await shop.findAll({
+      where: whereObj1,
+      attributes: ["shop_name", "shop_avatar", "instructions"],
+      include: includeObj
     })
     return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
