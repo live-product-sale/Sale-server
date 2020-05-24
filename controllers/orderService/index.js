@@ -4,14 +4,13 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:02:35
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-13 14:48:17
+ * @LastEditTime: 2020-05-24 12:28:44
  */
 const orderModal = require('../../modal/order')
-const orderDetail = require('../../modal/order/order-detail')
-const payOrder = require('../../modal/order/order-pay')
+const orderDetail = require('../../modal/order/order.detail')
+const payOrder = require('../../modal/order/order.pay')
 const cartMoal = require('../../modal/cart')
 const shopMoal = require('../../modal/shop/index')
-const goods = require('../../modal/goods/index')
 const commentModal = require('../../modal/comment')
 const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
@@ -58,23 +57,11 @@ class orderService {
 
   // 创建订单
   static async createOrder(ctx) {
-    const { shopInfo, goodsInfo, uid, address_id } = ctx.request.body
-    // console.log(goodsInfo)
-    let total_price = 0
-    const order_id = Date.now()
-    shopInfo.forEach(item => {
-        item["order_id"] = order_id,
-        item["uid"] = uid,
-        item["address_id"] = address_id
-    })
-    goodsInfo.forEach(item => {
-      item["order_id"] = order_id
-      total_price += Number(item.goods_price) * Number(item.goods_num).toFixed(2)
-    })
+    const { shopInfo, goodsInfo, uid, total_price, order_id } = ctx.request.body
     await orderModal.bulkCreate(shopInfo)
     await orderDetail.bulkCreate(goodsInfo)
     await payOrder.create({ order_id, uid, total_price })
-    return ctx.body = uniformRes(resCode.SUCCESS, { order_id } )
+    ctx.body = uniformRes(resCode.SUCCESS, { order_id } )
   }
 
   // 获取未支付的订单
@@ -109,7 +96,6 @@ class orderService {
   static async getOrderList(ctx) {
     const { order_state, uid, offset, limit } = ctx.request.query
     let orderList = []
-    // console.log(order_state)
     if (order_state === '0') {
       orderList = await orderModal.findAll({
         where: { uid },
@@ -153,14 +139,12 @@ class orderService {
      await orderDetail.destroy({
       where: { order_id }
     })
-     await payOrder.destroy({
+    await payOrder.destroy({
       where: { order_id, uid }
     })
     await orderModal.destroy({
-      where: { order_id, uid }
+      where: { order_id }
     })
-   
-   
     return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
 
@@ -168,7 +152,7 @@ class orderService {
   static async confirmOrder(ctx) {
     const { order_id, uid, shop_id } = ctx.request.body
     await orderModal.update({
-      order_state: 3
+      order_state: 4
     }, { where: { order_id, uid, shop_id } })
     return ctx.body = uniformRes(resCode.SUCCESS, null )
   }
@@ -178,7 +162,7 @@ class orderService {
     const data= ctx.request.body
     const comment_date = dealTime()
     await orderModal.update({
-      order_state: 4
+      order_state: 0
     }, { where: { order_id: data.order_id, uid: data.uid } })
     await commentModal.create({...data, comment_date })
     return ctx.body = uniformRes(resCode.SUCCESS, null )

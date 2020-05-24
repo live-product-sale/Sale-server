@@ -4,10 +4,11 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-10 12:28:22
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-04 21:22:22
+ * @LastEditTime: 2020-05-24 12:47:32
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
+const order = require('./index')
 
 const payOrder = mysql.define('payOrder', {
   order_id: {      // 订单ID
@@ -36,4 +37,6 @@ payOrder.sync({
 }).then(() => {
   console.log('payOrder is success')
 })
+payOrder.belongsTo(order, { foreignKey: "order_id", targetKey: "order_id"})
+order.hasOne(payOrder, { foreignKey: "order_id", targetKey: "order_id"})
 module.exports = payOrder

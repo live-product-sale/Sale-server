@@ -4,18 +4,18 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-13 22:26:00
+ * @LastEditTime: 2020-05-24 09:59:01
  */
 const Op = require('sequelize').Op
 const live = require('../../modal/live')
-const followLiveModal = require('../../modal/live/followLive')
+const followLiveModal = require('../../modal/live/follow.live')
 const buried = require('../../modal/live/buried')
 const { uniformRes } = require('../../util/utils')
 const { resCode } = require('../../util/errorCode')
 const setTable = require('../../util/recommend/index')
 const shop = require('../../modal/shop')
 const goods = require('../../modal/goods')
-const goodsInfo = require('../../modal/goods/goodsInfo')
+const goodsInfo = require('../../modal/goods/goods.info')
 
 /**
  * @param { Array } liveArray

@@ -7,7 +7,7 @@ const compress = require('koa-compress')
 const koaJwt = require('koa-jwt')   // 验证token
 const koaBody = require('koa-body')  // 处理文件上传
 
-const sendHandle = require('./middleware/sendHandle')
+// const sendHandle = require('./middleware/send.handle')
 const errorHandle = require('./middleware/errorHandle')
 const countLogger = require('./middleware/logger')
 const allRoutes = require('./routes/index')

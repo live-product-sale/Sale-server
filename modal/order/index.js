@@ -4,11 +4,11 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:55:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-04 21:18:32
+ * @LastEditTime: 2020-05-24 11:03:47
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
-const orderDetail = require('./order-detail')
+const orderDetail = require('./order.detail')
 const order = mysql.define('order', {
   order_id: {                 // 订单ID
     type: sequelize.STRING,

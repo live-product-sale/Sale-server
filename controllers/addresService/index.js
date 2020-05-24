@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:11:59
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-01 10:09:18
+ * @LastEditTime: 2020-05-24 11:51:19
  */
 const addressModal = require('../../modal/address')
 const { uniformRes } = require('../../util/utils')
@@ -31,7 +31,6 @@ class AddressServie {
       await addressModal.update({
         name: data.name,
         mobile: data.mobile,
-        addressName: data.addressName,
         address: data.address,
         area: data.area,
         isDefault: data.isDefault

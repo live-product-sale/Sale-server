@@ -1,7 +1,7 @@
 const router = require('koa-router')()
 const userServices = require('../../controllers/userServices')
-const common = require('../../controllers/commServices')
-const checkLogin = require('../../middleware/loginHandle')
+const common = require('../../controllers/comm.services')
+const checkLogin = require('../../middleware/login.middleware')
 const { 
   IsMobile, 
   IsMobileRegisted

@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 10:26:30
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-04 21:38:47
+ * @LastEditTime: 2020-05-24 11:51:41
  */
 const Sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
@@ -17,9 +17,6 @@ const address = mysql.define('address', {
     type: Sequelize.STRING
   },
   mobile: {        // 用户手机
-    type: Sequelize.STRING
-  },
-  addressName: {   // 用户地址
     type: Sequelize.STRING
   },
   address: {       // 详细地址

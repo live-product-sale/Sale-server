@@ -4,11 +4,11 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:41:32
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-09 09:44:55
+ * @LastEditTime: 2020-05-24 10:01:35
  */
 const router = require('koa-router')()
 const cartService = require('../../controllers/cartService')
-const cartMiddleware = require('../../middleware/cartMiddleware')
+const cartMiddleware = require('../../middleware/cart.middleware')
 
 router.prefix('/cart')
 // 获取购物车数据

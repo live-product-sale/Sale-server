@@ -11,7 +11,7 @@
 const live = require('../../modal/live/index')
 const shop = require('../../modal/shop')
 const goods = require('../../modal/goods/index')
-const goodsInfo = require('../../modal/goods/goodsInfo')
+const goodsInfo = require('../../modal/goods/goods.info')
 const Op = require('sequelize').Op
 const { uniformRes } = require('../../util/utils')
 const { resCode } = require('../../util/errorCode')

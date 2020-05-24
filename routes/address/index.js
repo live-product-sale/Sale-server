@@ -4,12 +4,12 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:14:06
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-03-10 22:09:38
+ * @LastEditTime: 2020-05-24 10:01:01
  */
 
  const router           = require('koa-router')()
  const AddressService   = require('../../controllers/addresService')
- const AddressMiddlware = require('../../middleware/addressMilleware')
+ const AddressMiddlware = require('../../middleware/address.middleware')
 
  router.prefix('/address')
  // 获取用户地址信息
