@@ -4,13 +4,13 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-07 21:08:15
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-13 15:26:38
+ * @LastEditTime: 2020-05-27 22:06:08
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const goods = require('./index')
 
-const goodsInfo = mysql.define("goodsinfo", {
+const goodsInfo = mysql.define("goods_infos", {
   goods_price: {    // 商品价格
     type: sequelize.STRING
   },
@@ -21,11 +21,11 @@ const goodsInfo = mysql.define("goodsinfo", {
     type: sequelize.STRING
   },
   goods_id: {       // 商品id
-    type: sequelize.INTEGER
+    type: sequelize.INTEGER(11)
   }
 }, {
-  freezeTableName: false,
-  timestamps: false
+  timestamps: false,
+  tableName: 'goods_infos'
 })
 
 goodsInfo.sync({

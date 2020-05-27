@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 09:59:01
+ * @LastEditTime: 2020-05-25 21:26:52
  */
 const Op = require('sequelize').Op
 const live = require('../../modal/live')
@@ -54,17 +54,20 @@ class customerService {
         include: includeObj
       })
     }
+    console.log(recommendLive, "recp")
     const whereObj2 = { live_id: { [Op.not]: liveSet } }
     let otherLive = await shop.findAll({
       offset: Number(offset),
       limit: Number(limit) - recommendLive.length,
       where: whereObj2,
-      attributes: [ "shop_name", "shop_avatar", "instructions"],
+      attributes: [ "shop_id","shop_name", "shop_avatar", "instructions"],
       include: includeObj
     })
-    let allLive = [...recommendLive, ...otherLive]
+    console.log(otherLive, "other")
+    let allLive = [...recommendLive,...otherLive]
     return ctx.body = uniformRes(resCode.SUCCESS,allLive )
   }
+  
   // 根据Live_id获取直播间拉流信息
   static async getLivePlay(ctx) {
     const { live_id, uid } = ctx.request.query

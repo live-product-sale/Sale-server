@@ -3,7 +3,7 @@ const {
   generateId,
   uniformRes
 } = require('../../util/utils')
-const { resCode } = require('../../util/errorCode')
+const { resCode, errMsg } = require('../../util/errorCode')
 const userInfo = require('../../modal/user/userinfo')
 const userModal = require('../../modal/user')
 const advice = require('../../modal/advices')
@@ -32,11 +32,15 @@ class cusController {
   // 处理登陆
   static async login(ctx) {
     const { cphone, cpassword } = ctx.request.body
+    console.log(cpassword)
     const result = await userModal.findOne({
       where: { cphone },
       include: [userInfo]
     })
-    if (result.cpassword === cpassword) {
+    if(!result) {
+       return ctx.body = uniformRes(resCode.EMPTY, errMsg[resCode.EMPTY] )
+    }
+    if (result !== null && result.cpassword === cpassword) {
       const data = { 
         token: createToken({ cphone, cpassword }), 
         userinfo: result 

@@ -4,22 +4,26 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 13:55:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 11:03:47
+ * @LastEditTime: 2020-05-27 21:56:18
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const orderDetail = require('./order.detail')
 const order = mysql.define('order', {
+  id: {
+    type: sequelize.INTEGER(11),
+    primaryKey: true,
+    autoIncrement: true
+  },
   order_id: {                 // 订单ID
-    type: sequelize.STRING,
-    primaryKey: true
+    type: sequelize.INTEGER(50)
   }, 
   order_state: {               // 订单状态
     type: sequelize.STRING,
     defaultValue: "1"          // 1: 待付款， 2:待收货， 3: 待评价， 4: 已完成
   },
   shop_id: {                   // 店铺ID
-    type: sequelize.STRING
+    type: sequelize.INTEGER(11)
   }, 
   shop_name: {                 // 店铺名称
     type: sequelize.STRING
@@ -31,14 +35,12 @@ const order = mysql.define('order', {
     type: sequelize.STRING
   },
   address_id: {                // 地址ID
-    type: sequelize.STRING
+    type: sequelize.INTEGER
   }
 }, {
-  timestamps: false
+  timestamps: false,
+  tableName: 'orders'
 })
-
-// order.hasMany(orderDetail, { foreignKey: "order_id", targetKey: "order_id"})
-// orderDetail.belongsTo(order, {foreignKey: "order_id", targetKey: "order_id"})
 
 orderDetail.sync({
   force: false

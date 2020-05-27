@@ -4,21 +4,26 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-10 11:10:10
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-13 15:01:45
+ * @LastEditTime: 2020-05-27 22:05:36
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const order = require('./index')
 
-const orderDetail = mysql.define('orderDetail', {
+const orderDetail = mysql.define('order_detail', {
+  id: {
+    type: sequelize.INTEGER(11),
+    primaryKey: true,
+    autoIncrement: true
+  },
   order_id: {       // 订单ID
-    type: sequelize.STRING
+    type: sequelize.INTEGER(50)
   },
   shop_id: {        // 店铺ID
-    type: sequelize.STRING
+    type: sequelize.INTEGER(11)
   },
   goods_id: {       // 商品ID
-    type: sequelize.STRING
+    type: sequelize.INTEGER(11)
   },
   goods_name: {     // 商品名称
     type: sequelize.STRING
@@ -39,7 +44,8 @@ const orderDetail = mysql.define('orderDetail', {
     type: sequelize.STRING
   }
 }, {
-  timestamps: false
+  timestamps: false,
+  tableName: 'order_details'
 })
 
 module.exports = orderDetail

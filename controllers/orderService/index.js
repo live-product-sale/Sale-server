@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:02:35
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 12:28:44
+ * @LastEditTime: 2020-05-26 22:23:12
  */
 const orderModal = require('../../modal/order')
 const orderDetail = require('../../modal/order/order.detail')
@@ -58,6 +58,7 @@ class orderService {
   // 创建订单
   static async createOrder(ctx) {
     const { shopInfo, goodsInfo, uid, total_price, order_id } = ctx.request.body
+    // console.log(order_id, total_price)
     await orderModal.bulkCreate(shopInfo)
     await orderDetail.bulkCreate(goodsInfo)
     await payOrder.create({ order_id, uid, total_price })

@@ -4,7 +4,8 @@ const live = require('../live/index')
 
 const shop = mysql.define('shop', {
   shop_id: {      // 店铺ID
-    type: Sequelize.INTEGER,
+    type: Sequelize.INTEGER(11),
+    autoIncrement: true,
     primaryKey: true
   },
   shop_name: {    // 店铺名称
@@ -44,10 +45,11 @@ const shop = mysql.define('shop', {
     type: Sequelize.STRING
   },
   live_id: {      // 直播间ID
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER(11)
   }
 }, {
-  timestamps: false
+  timestamps: false,
+  tableName: 'shops'
 })
 shop.sync({
   force: false
@@ -55,6 +57,4 @@ shop.sync({
   console.log('shop is successful')
 })
 
-// shop.belongsTo(live, { foreignKey: "live_id", targetKey: "live_id"})
-// live.hasOne(shop, { foreignKey: "live_id", targetKey: "live_id"})
 module.exports = shop

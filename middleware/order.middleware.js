@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-05-24 11:38:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 13:04:34
+ * @LastEditTime: 2020-05-26 22:13:39
  */ 
 const orderModal = require('../modal/order/index')
 const shopModal = require('../modal/shop/index')
@@ -13,7 +13,7 @@ const payOrder = require('../modal/order/order.pay')
 const calculateTotalPrice = async (ctx, next) => {
   const { shopInfo, goodsInfo, uid, address_id } = ctx.request.body
   let total_price = 0
-  const order_id = Date.now()
+  const order_id = Number(Math.random().toString().substr(3, 5) + Date.now().toString().substr(9))
   shopInfo.forEach(item => {
       item["order_id"] = order_id,
       item["uid"] = uid,

@@ -4,20 +4,23 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-10 12:28:22
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 12:47:32
+ * @LastEditTime: 2020-05-27 22:00:25
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
 const order = require('./index')
 
-const payOrder = mysql.define('payOrder', {
+const payOrder = mysql.define('order_pay', {
+  id: {
+    type: sequelize.INTEGER(11),
+    primaryKey: true,
+    autoIncrement: true
+  },
   order_id: {      // 订单ID
-    type: sequelize.STRING,
-    primaryKey: true
+    type: sequelize.INTEGER(50)
   },
   uid: {           // 用户ID
-    type: sequelize.STRING,
-    primaryKey: true
+    type: sequelize.STRING
   }, 
   total_price: {   // 订单总价格
     type: sequelize.STRING
@@ -30,7 +33,8 @@ const payOrder = mysql.define('payOrder', {
     defaultValue: false
   }
 }, {
-  timestamps: false
+  timestamps: false,
+  tableName: 'order_pay'
 })
 payOrder.sync({
   force: false

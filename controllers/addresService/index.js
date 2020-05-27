@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:11:59
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 11:51:19
+ * @LastEditTime: 2020-05-26 21:40:52
  */
 const addressModal = require('../../modal/address')
 const { uniformRes } = require('../../util/utils')
@@ -26,6 +26,7 @@ class AddressServie {
     const data = ctx.request.body
     const address_id = data.id
     const uid = data.uid
+    // console.log(data)
     if (data.action == "edit") {
       data.action = undefined
       await addressModal.update({

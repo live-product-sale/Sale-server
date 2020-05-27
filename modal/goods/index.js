@@ -4,8 +4,9 @@ const shop = require('../shop/index')
 
 const goods = mysql.define('goods', {
   goods_id: {       // 商品ID
-    type: Sequelize.INTEGER,
-    primaryKey: true
+    type: Sequelize.INTEGER(11),
+    primaryKey: true,
+    autoIncrement: true
   },
   goods_name: {     // 商品名称
     type: Sequelize.STRING
@@ -30,11 +31,11 @@ const goods = mysql.define('goods', {
     type: Sequelize.STRING
   },
   shop_id: {        // 店铺ID
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER(11)
   }
 }, {
-  freezeTableName: false,
-  timestamps: false
+  timestamps: false,
+  tableName: 'goods'
 })
 goods.sync({
   force: false
