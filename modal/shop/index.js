@@ -30,7 +30,7 @@ const shop = mysql.define('shop', {
     type: Sequelize.STRING
   },
   shop_money: {    // 店铺成交额度
-    type: Sequelize.STRING
+    type: Sequelize.INTEGER(50)
   },
   shop_view: {     // 店铺访问量
     type: Sequelize.STRING

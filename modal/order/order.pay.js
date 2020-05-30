@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-10 12:28:22
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-27 22:00:25
+ * @LastEditTime: 2020-05-29 11:50:30
  */
 const sequelize = require('sequelize')
 const mysql = require('../../db/mysql')
@@ -23,7 +23,8 @@ const payOrder = mysql.define('order_pay', {
     type: sequelize.STRING
   }, 
   total_price: {   // 订单总价格
-    type: sequelize.STRING
+    type: sequelize.STRING,
+    defaultValue: "0"
   },
   pay_type: {      // 支付方式  1: 微信支付 2:支付宝支付
     type: sequelize.STRING

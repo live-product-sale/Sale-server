@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-25 21:26:52
+ * @LastEditTime: 2020-05-27 23:21:25
  */
 const Op = require('sequelize').Op
 const live = require('../../modal/live')
@@ -70,17 +70,24 @@ class customerService {
   
   // 根据Live_id获取直播间拉流信息
   static async getLivePlay(ctx) {
-    const { live_id, uid } = ctx.request.query
+    const { live_id } = ctx.request.query
+    console.log(live_id)
     const includeObj = [ { model: shop, attributes: ["shop_name", "shop_avatar", "shop_id"]}]
     const result = await live.findOne({
       where: { live_id },
       attributes: ["live_id", "live_avatar", "live_url"],
       include: includeObj
     })
-    const resultOriented = await followLiveModal.findOne({
-      where: { uid, live_id }
+    const shopInfo = await shop.findOne({
+      where: { live_id },
+      attributes: ["shop_name", "shop_avatar", "shop_id"]
     })
+    const resultOriented = await followLiveModal.findOne({
+      where: { live_id }
+    })
+    console.log(shopInfo)
     result.dataValues['isfollow'] = resultOriented ? true : false
+    result.dataValues['shop'] = shopInfo
     return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
   // 关注直播间 或 取消关注

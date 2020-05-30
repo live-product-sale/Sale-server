@@ -4,14 +4,15 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 11:24:19
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 11:00:53
+ * @LastEditTime: 2020-05-29 21:52:09
  */
-const { generateId } = require('../../util/utils')
+// const { generateId } = require('../../util/utils')
 const shopModal = require('../../modal/shop')
 const goods = require('../../modal/goods/index')
-const goodsInfo = require('../../modal/goods/goods.info')
+const { IsAttrShopByUid } = require('../../middleware/shop.middlare')
+// const goodsInfo = require('../../modal/goods/goods.info')
 const { uniformRes } = require('../../util/utils')
-const { resCode } = require('../../util/errorCode')
+const { resCode, errMsg } = require('../../util/errorCode')
 
 class shopService {
   // 根据uid获取商店
@@ -57,14 +58,27 @@ class shopService {
   }
   // 更新店铺访问量
   static async updateViews(ctx) {
-    const { shop_id, views } = ctx.request.body
-    // console.log(shop_id, views, "view")
-    await shopModal.update({
-      shop_view: views + 1
-   }, {
-     where: { shop_id }
-   })
+    const { shop_id, views, isHeart } = ctx.request.body
+    if(!isHeart) {
+      await shopModal.update({
+          shop_view: views + 1
+      }, {
+        where: { shop_id }
+      })
+    } else {
+      await shopModal.update({
+          shop_view: views - 1
+      }, {
+        where: { shop_id }
+      })
+    }
    ctx.body = uniformRes(resCode.SUCCESS, null)
+  }
+  // 判断商店是否被用户关注
+  static async getIsHeart(ctx) {
+    const { shop_id, uid } = ctx.request.body
+    const result = await IsAttrShopByUid(shop_id, uid)
+    return ctx.body = uniformRes(resCode.SUCCESS, result, errMsg[resCode.SUCCESS])
   }
 }
 module.exports = shopService

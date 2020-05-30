@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-04 14:04:05
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 12:44:24
+ * @LastEditTime: 2020-05-29 12:05:04
  */
 const router = require('koa-router')()
 const orderService = require('../../controllers/orderService')
@@ -17,9 +17,9 @@ router.get('/orderModal', orderService.orderModal)
 // 创建订单
 router.post('/createOrder', calculateTotalPrice,orderService.createOrder)
 // 获取订单总额
-router.get('/payorder', orderService.getPayOrder)
+router.get('/payorder',getOrderTotalPrice, orderService.getPayOrder)
 // 确认支付
-router.post('/payconfirm',getOrderTotalPrice ,orderService.confirePay)
+router.post('/payconfirm', orderService.confirePay)
 // 订单列表
 router.get('/orderList', orderService.getOrderList)
 // 取消订单

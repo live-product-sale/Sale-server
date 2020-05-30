@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-05-24 11:38:38
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-26 22:13:39
+ * @LastEditTime: 2020-05-29 12:02:45
  */ 
 const orderModal = require('../modal/order/index')
 const shopModal = require('../modal/shop/index')
@@ -33,6 +33,7 @@ const getOrderTotalPrice = async (ctx, next) => {
     attributes: ["shop_id"],
     include: { model: payOrder, attributes: ["total_price"]}
   }).then(res => {
+    console.log(res)
     shopModal.findOne({
         where: {shop_id: res.shop_id},
         attributes: ["shop_money"]

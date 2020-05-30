@@ -48,6 +48,6 @@ live.sync({
 }).then(() => {
   console.log('live is successful')
 })
-shop.belongsTo(live, { foreignKey: "live_id", targetKey: "live_id"})
-live.hasOne(shop, { foreignKey: "live_id", targetKey: "live_id"})
+shop.belongsTo(live, { foreignKey: "shop_id", targetKey: "shop_id"})
+live.hasOne(shop, { foreignKey: "shop_id", targetKey: "shop_id"})
 module.exports = live

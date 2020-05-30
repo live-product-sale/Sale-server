@@ -25,10 +25,12 @@ const goods = mysql.define('goods', {
     type: Sequelize.STRING
   },
   goods_sales: {    // 商品销量
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    defaultValues: "0" 
   },
   goods_views: {    // 商品浏览量
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    defaultValues: "0" 
   },
   shop_id: {        // 店铺ID
     type: Sequelize.INTEGER(11)

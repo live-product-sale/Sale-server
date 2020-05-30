@@ -4,10 +4,12 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-05-24 09:43:06
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-24 12:32:18
+ * @LastEditTime: 2020-05-29 21:52:57
  */ 
 const shopModal = require('../modal/shop/index')
 const followShop = require('../modal/shop/follow.shop')
+const { uniformRes } = require('../util/utils')
+const { resCode, errMsg } = require('../util/errorCode')
 
 const getShopAmount = async (ctx, next) => {
     const data = ctx.request.body
@@ -41,8 +43,37 @@ const getShopSales = async (ctx, next) => {
   }, {where: { shop_id }})
   await next()  
 }
+// 用户是否关注商店
+const IsAttrShopByUid = (shop_id, uid) => {
+  return followShop.findOne({
+    where: { shop_id, uid }
+  }).then(res => {
+    if(!res) {
+      return false
+    } else {
+      return true
+    }
+  })
+}
+const AttrShop = async (ctx, next) => {
+   const { shop_id, uid, isHeart} = ctx.request.body
+   console.log(isHeart, shop_id, uid)
+   if(!isHeart) {
+    await followShop.create({
+      shop_id, uid
+    })
+    await next()
+   } else {
+     await followShop.destroy({
+       where: {shop_id, uid}
+     })
+     await next()
+   }
+}
 module.exports = {
   getShopAmount,
   getShopViews,
-  getShopSales
+  getShopSales,
+  AttrShop,
+  IsAttrShopByUid
 }
