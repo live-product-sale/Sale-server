@@ -4,7 +4,7 @@
  * @Github: https://github.com/ZNVICTORY
  * @Date: 2020-03-06 19:53:21
  * @LastEditors: zhangmeng
- * @LastEditTime: 2020-05-27 23:21:25
+ * @LastEditTime: 2020-06-03 16:29:34
  */
 const Op = require('sequelize').Op
 const live = require('../../modal/live')
@@ -72,22 +72,21 @@ class customerService {
   static async getLivePlay(ctx) {
     const { live_id } = ctx.request.query
     console.log(live_id)
-    const includeObj = [ { model: shop, attributes: ["shop_name", "shop_avatar", "shop_id"]}]
-    const result = await live.findOne({
+    // const includeObj = [ { model: shop, attributes: ["shop_name", "shop_avatar", "shop_id"]}]
+    let liveInfo = await live.findOne({
       where: { live_id },
-      attributes: ["live_id", "live_avatar", "live_url"],
-      include: includeObj
+      attributes: ["live_id", "live_avatar", "live_url"]
     })
-    const shopInfo = await shop.findOne({
+    let shopInfo = await shop.findOne({
       where: { live_id },
       attributes: ["shop_name", "shop_avatar", "shop_id"]
     })
-    const resultOriented = await followLiveModal.findOne({
+    let resultOriented = await followLiveModal.findOne({
       where: { live_id }
     })
-    console.log(shopInfo)
-    result.dataValues['isfollow'] = resultOriented ? true : false
-    result.dataValues['shop'] = shopInfo
+    let result = Object.assign({}, liveInfo.dataValues, shopInfo.dataValues)
+    result['isfollow'] = resultOriented ? true : false
+    console.log('res',result)
     return ctx.body = uniformRes(resCode.SUCCESS, result)
   }
   // 关注直播间 或 取消关注
